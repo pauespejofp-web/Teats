@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const API_URL = "../api.php";
+  const PRODUCTS_API = "../apiProductos.php";
 
   const tbody = document.getElementById("usuarios-body");
   const editarForm = document.getElementById("editar-form");
@@ -8,7 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const addForm = document.getElementById("add-form");
   const addModal = document.getElementById("modalAddUser");
 
- 
+  const productosTbody = document.getElementById("productos-body");
+
   function cargarUsuarios() {
     fetch(API_URL)
       .then(res => res.json())
@@ -92,13 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(() => alert("Error al eliminar usuario"));
   }
 
-
-
-
-
-
-
-
   if (addForm) {
     addForm.addEventListener("submit", e => {
       e.preventDefault();
@@ -160,5 +155,56 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // función para cargar productos
+  function cargarProductos() {
+    if (!productosTbody) return;
+    fetch(PRODUCTS_API)
+      .then(res => res.json())
+      .then(json => {
+        productosTbody.innerHTML = "";
+        if (json && json.estado === "Exito" && Array.isArray(json.data)) {
+          json.data.forEach(p => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${p.id_producto}</td>
+              <td>${escapeHtml(p.nombre)}</td>
+              <td>${Number(p.precio).toFixed(2)} €</td>
+              <td>${p.disponible == 1 ? 'Sí' : 'No'}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary" onclick="window.location.href='/Modelo-Vista-Controlador/index.php?controller=productos&action=editar&id=${p.id_producto}'">Editar</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="if(confirm('Eliminar producto?')) window.location.href='/Modelo-Vista-Controlador/index.php?controller=productos&action=eliminar&id=${p.id_producto}'">Eliminar</button>
+              </td>
+            `;
+            productosTbody.appendChild(tr);
+          });
+        } else {
+          productosTbody.innerHTML = `<tr><td colspan="5" class="text-muted">No se encontraron productos.</td></tr>`;
+        }
+      })
+      .catch(err => {
+        console.error('Error cargando productos', err);
+        if (productosTbody) productosTbody.innerHTML = `<tr><td colspan="5" class="text-danger">Error cargando productos</td></tr>`;
+      });
+  }
+
+  // llamar cargarProductos al inicio (opcional) y cuando se pulsa el botón Productos del menú
+  window.cargarProductos = cargarProductos;
+  cargarProductos();
+
+  // detectar clicks en el menú para recargar productos cuando se activa la sección productos
+  document.querySelectorAll('.menu-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.target === 'sec-productos') {
+        cargarProductos();
+      }
+    });
+  });
+
   cargarUsuarios();
 });
+
+function escapeHtml(html) {
+  const text = document.createElement('textarea');
+  text.innerHTML = html;
+  return text.value;
+}

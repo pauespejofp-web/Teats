@@ -68,8 +68,9 @@ class ProductoDAO
     {
         $con = DataBase::connect();
         $stmt = $con->prepare("DELETE FROM producto WHERE id_producto = ?");
-        $stmt->bind_param("i", $id);
 
+        $id = $id->getIdProducto();
+        $stmt->bind_param("i", $id);
         $resultado = $stmt->execute();
 
         $stmt->close();
