@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Admin</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		/* estilos mínimos para demo */
+		.sidebar { width:220px; float:left; padding:12px; border-right:1px solid #eee; height:100vh; }
+		.content { margin-left:240px; padding:16px; }
+		.menu-btn { display:block; width:100%; text-align:left; margin-bottom:6px; }
+		.content-section { display:none; }
+		.content-section.active-section { display:block; }
+		.menu-btn.active-btn { background:rgba(13,110,253,0.08); color:#0d6efd; }
+	</style>
+</head>
+<body>
+
+	<aside class="sidebar">
+		<h5>Admin</h5>
+		<button class="menu-btn active-btn" data-target="sec-usuarios">Usuarios</button>
+		<button class="menu-btn" data-target="sec-pedidos">Pedidos</button>
+		<button class="menu-btn" data-target="sec-productos">Productos</button>
+		<button class="menu-btn" data-target="sec-ofertas">Ofertas</button>
+	</aside>
+
+	<main class="content">
+		<section id="sec-usuarios" class="content-section active-section">
+			<h3>Usuarios</h3>
+			<p>Contenido de usuarios...</p>
+		</section>
+
+		<section id="sec-pedidos" class="content-section">
+			<h3>Pedidos</h3>
+			<p>Contenido de pedidos...</p>
+		</section>
+
+		<section id="sec-productos" class="content-section">
+			<h3>Productos</h3>
+			<p>Contenido de productos...</p>
+		</section>
+
+		<section id="sec-ofertas" class="content-section">
+			<h3>Ofertas</h3>
+			<p>Contenido de ofertas...</p>
+		</section>
+	</main>
+
+<script>
+/* filepath: c:\xampp\htdocs\Modelo-Vista-Controlador\assets\admin.html - script corregido */
+/* Uso: botones con class="menu-btn" y atributo data-target="<id-seccion>" */
+(function () {
+	const botonesMenu = document.querySelectorAll('.menu-btn');
+	const secciones = document.querySelectorAll('.content-section');
+
+	if (!botonesMenu.length || !secciones.length) return;
+
+	function clearActive() {
+		botonesMenu.forEach(b => b.classList.remove('active-btn'));
+		secciones.forEach(s => s.classList.remove('active-section'));
+	}
+
+	function activate(targetId) {
+		const el = document.getElementById(targetId);
+		if (!el) return;
+		clearActive();
+		el.classList.add('active-section');
+		// activar botón correspondiente
+		const btn = Array.from(botonesMenu).find(x => x.dataset.target === targetId);
+		if (btn) btn.classList.add('active-btn');
+	}
+
+	// listeners en botones
+	botonesMenu.forEach(btn => {
+		btn.addEventListener('click', function (e) {
+			const target = btn.dataset.target;
+			if (target) activate(target);
+		});
+		// accesibilidad básica
+		btn.addEventListener('keydown', function (e) {
+			if (e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				btn.click();
+			}
+		});
+	});
+
+	// inicializar: si hay un botón marcado, activarlo; si no, primera sección
+	const pre = Array.from(botonesMenu).find(b => b.classList.contains('active-btn') || b.dataset.default === 'true');
+	if (pre && pre.dataset.target) activate(pre.dataset.target);
+	else if (botonesMenu[0] && botonesMenu[0].dataset.target) activate(botonesMenu[0].dataset.target);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+body {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+}
+
+.navbar-brand img {
+    filter: brightness(1.3);
+}
+
+.nav-link {
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+}
+.text-white {
+    color: white;
+}
+
+.session-user {
+    text-align: center;
+    font-size: 25px;
+    margin-top: 10px;
+}
+.home-background{
+    background-image: url('Fondo/Fondo-Web2.png');
+    height: 92vh;
+    background-size: cover;
+    background-position: center;
+    
+}
+.home h1{
+    
+}

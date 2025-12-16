@@ -1,0 +1,11 @@
+2025-12-11 16:40:57 DELETE id_usuario=14 -> {"estado":"Exito"}
+2025-12-11 16:41:34 DELETE id_usuario=2 -> {"estado":"Exito"}
+2025-12-11 16:47:39 DELETE id_usuario=21 -> {"estado":"Exito"}
+2025-12-11 16:51:47 DELETE id_usuario=20 -> {"estado":"Exito"}
+2025-12-11 16:53:22 DELETE id_usuario=19 -> {"estado":"Exito"}
+2025-12-11 16:54:04 DELETE id_usuario=19 -> {"estado":"Fallido","data":"Usuario no encontrado"}
+2025-12-11 16:54:43 DELETE id_usuario=18 -> {"estado":"Exito"}
+2025-12-11 16:58:27 DELETE id_usuario=17 -> {"estado":"Exito"}
+2025-12-11 17:01:25 DELETE id_usuario=22 -> {"estado":"Exito"}
+2025-12-11 17:04:45 DELETE id_usuario=24 -> {"estado":"Exito"}
+2025-12-11 17:04:53 DELETE id_usuario=25 -> {"estado":"Exito"}
