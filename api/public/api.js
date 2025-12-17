@@ -232,8 +232,16 @@ document.addEventListener("DOMContentLoaded", () => {
 //   text.innerHTML = html;
 //   return text.value;
 // }
+
+
+
+
+
+
+
   function cargarProductos() {
     if (!productosTbody) return;
+    const BASE_URL = '/Modelo-Vista-Controlador/'
 
     fetch(PRODUCTS_API)
       .then(res => res.json())
@@ -242,14 +250,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (json.estado === "Exito") {
           json.data.forEach(p => {
+            let imgUrl = p.imagen_url || '';
+            if (imgUrl && !imgUrl.startsWith('http') && !imgUrl.startsWith('/')) {
+              imgUrl = BASE_URL + imgUrl;
+            }
+
             const tr = document.createElement("tr");
             tr.innerHTML = `
+              <td>${imgUrl ? `<img src="${imgUrl}" width="180" alt="${p.nombre}">` : ''}</td>
               <td>${p.id_producto}</td>
               <td>${p.nombre}</td>
               <td>${p.descripcion}</td>
               <td>${p.precio} €</td>
               <td>${p.categoria}</td>
-              <td><img src="${p.imagen_url}" width="50"></td>
               <td>
                 <button class="btn btn-sm btn-primary">Editar</button>
                 <button class="btn btn-sm btn-danger">Eliminar</button>
@@ -264,4 +277,3 @@ document.addEventListener("DOMContentLoaded", () => {
 cargarUsuarios();
 cargarProductos();
 });
-
