@@ -71,4 +71,34 @@ class ProductoDAO
 
         return $resultado;
     }
+    public static function editarProducto(Producto $producto)
+    {
+        $con = DataBase::connect();
+
+        $stmt = $con->prepare(
+            "UPDATE producto 
+         SET nombre = ?, 
+             descripcion = ?, 
+             precio = ?, 
+             categoria_id = ?, 
+             imagen_url = ?
+         WHERE id_producto = ?"
+        );
+        $nombre = $producto->getNombre();
+        $descripcion = $producto->getDescripcion();
+        $precio = $producto->getPrecio();
+        $categoria_id = $producto->getCategoriaId();
+        $imagen_url = $producto->getImagenUrl();
+        $id_producto = $producto->getIdProducto();
+
+        $stmt->bind_param("ssdisi", $nombre, $descripcion, $precio, $categoria_id, $imagen_url, $id_producto);
+
+
+        $resultado = $stmt->execute();
+
+        $stmt->close();
+        $con->close();
+
+        return $resultado;
+    }
 }

@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-  //Eliminar:
+  //Eliminar Usr:
 
 
   function eliminarUsuario(id_usuario) {
@@ -177,71 +177,8 @@ function eliminarProducto(id_producto) {
 
 
 
-
-
-  // función para cargar productos
-//   function cargarProductos() {
-//     if (!productosTbody) return;
-//     fetch(PRODUCTS_API)
-//       .then(res => res.json())
-//       .then(json => {
-//         productosTbody.innerHTML = "";
-//         if (json && json.estado === "Exito" && Array.isArray(json.data)) {
-//           json.data.forEach(p => {
-//             const tr = document.createElement("tr");
-//             tr.innerHTML = `
-//               <td>${p.id_producto}</td>
-//               <td>${escapeHtml(p.nombre)}</td>
-//               <td>${Number(p.precio).toFixed(2)} €</td>
-//               <td>${p.disponible == 1 ? 'Sí' : 'No'}</td>
-//               <td>
-//                 <button class="btn btn-sm btn-outline-primary" onclick="window.location.href='/Modelo-Vista-Controlador/index.php?controller=productos&action=editar&id=${p.id_producto}'">Editar</button>
-//                 <button class="btn btn-sm btn-outline-danger" onclick="if(confirm('Eliminar producto?')) window.location.href='/Modelo-Vista-Controlador/index.php?controller=productos&action=eliminar&id=${p.id_producto}'">Eliminar</button>
-//               </td>
-//             `;
-//             productosTbody.appendChild(tr);
-//           });
-//         } else {
-//           productosTbody.innerHTML = `<tr><td colspan="5" class="text-muted">No se encontraron productos.</td></tr>`;
-//         }
-//       })
-//       .catch(err => {
-//         console.error('Error cargando productos error', err);
-//         if (productosTbody) productosTbody.innerHTML = `<tr><td colspan="5" class="text-danger">Error cargando productoss</td></tr>`;
-//       });
-//   }
-
-//   // llamar cargarProductos al inicio (opcional) y cuando se pulsa el botón Productos del menú
-//   window.cargarProductos = cargarProductos;
-//   cargarProductos();
-
-//   // detectar clicks en el menú para recargar productos cuando se activa la sección productos
-//   document.querySelectorAll('.menu-btn').forEach(btn => {
-//     btn.addEventListener('click', () => {
-//       if (btn.dataset.target === 'sec-productos') {
-//         cargarProductos();
-//       }
-//     });
-//   });
-
-//   cargarUsuarios();
-// });
-
-// function escapeHtml(html) {
-//   const text = document.createElement('textarea');
-//   text.innerHTML = html;
-//   return text.value;
-// }
-
-
-
-
-
-
-
   function cargarProductos() {
     if (!productosTbody) return;
-    const BASE_URL = '/Modelo-Vista-Controlador/'
 
     fetch(PRODUCTS_API)
       .then(res => res.json())
@@ -250,14 +187,10 @@ function eliminarProducto(id_producto) {
 
         if (json.estado === "Exito") {
           json.data.forEach(p => {
-            let imgUrl = p.imagen_url || '';
-            if (imgUrl && !imgUrl.startsWith('http') && !imgUrl.startsWith('/')) {
-              imgUrl = BASE_URL + imgUrl;
-            }
-
+            
             const tr = document.createElement("tr");
             tr.innerHTML = `
-              <td>${imgUrl ? `<img src="${imgUrl}" width="180" alt="${p.nombre}">` : ''}</td>
+              <td>${p.imagen_url ? `<img src="/Modelo-Vista-Controlador/${p.imagen_url}" width="180" alt="${p.nombre}">` : ''}</td>
               <td>${p.id_producto}</td>
               <td>${p.nombre}</td>
               <td>${p.descripcion}</td>

@@ -67,6 +67,50 @@ switch ($metodo) {
         break;
 
 
+
+        //PUT:
+
+
+    case 'PUT':
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (isset($data['id_producto'], $data['nombre'], $data['descripcion'],
+        $data['precio'],$data['categoria'],$data['imagen_url'])) {
+            $producto = ProductoDAO::getById(intval($data['id_producto']));
+            if ($producto) {
+                $producto->setNombre($data['nombre']);
+                $producto->setDescripcion($data['descripcion']);
+                $producto->setPrecio($data['precio']);
+                $producto->setCategoriaId($data['categoria']);
+                $producto->setImagenUrl($data['imagen_url']);
+
+                $resultado = ProductoDAO::editarProducto($producto);
+                if ($resultado) {
+                    echo json_encode(['estado' => 'Exito']);
+                } else {
+                    echo json_encode(['estado' => 'Fallido']);
+                }
+            } else {
+                http_response_code(404);
+                echo json_encode(['estado' => 'Fallido', 'data' => 'Producto no encontrado']);
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode(['estado' => 'Fallido', 'data' => 'Faltan datos']);
+        }
+        break;
+
+
+
+
+
+
+
+
+
+
+
+
+
        //DELETE:
 
 
@@ -74,7 +118,7 @@ switch ($metodo) {
         $data = json_decode(file_get_contents("php://input"), true);
 
         if (isset($data['id_producto'])) {
-            $producto = ProductoDAO::getById(intval($data['id_producto']));
+            $producto = ProductoDAO::getById($data['id_producto']);
 
             if ($producto) {
                 $resultado = ProductoDAO::eliminarProducto($producto);
@@ -129,31 +173,7 @@ switch ($metodo) {
 
 
 
-    // case 'PUT':
-    //     $data = json_decode(file_get_contents("php://input"), true);
-    //     if (isset($data['id_usuario'], $data['nombre'], $data['email'])) {
-    //         $usuario = UsuarioDao::getById(intval($data['id_usuario']));
-    //         if ($usuario) {
-    //             $usuario->setNombre($data['nombre']);
-    //             $usuario->setEmail($data['email']);
-    //             if (!empty($data['password'])) {
-    //                 $usuario->setContraseña(password_hash($data['password'], PASSWORD_BCRYPT));
-    //             }
-    //             $resultado = UsuarioDao::editar($usuario);
-    //             if ($resultado) {
-    //                 echo json_encode(['estado' => 'Exito']);
-    //             } else {
-    //                 echo json_encode(['estado' => 'Fallido']);
-    //             }
-    //         } else {
-    //             http_response_code(404);
-    //             echo json_encode(['estado' => 'Fallido', 'data' => 'Usuario no encontrado']);
-    //         }
-    //     } else {
-    //         http_response_code(400);
-    //         echo json_encode(['estado' => 'Fallido', 'data' => 'Faltan datos']);
-    //     }
-    //     break;
+
 
 
 
