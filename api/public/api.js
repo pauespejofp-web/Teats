@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
             tbody.appendChild(tr);
           });
 
-          // Añadir listeners a los botones generados
           document.querySelectorAll(".btn-editar").forEach(btn => {
             btn.addEventListener("click", () => editarUsuario(btn.dataset.id));
           });
@@ -154,57 +153,115 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(() => alert("Error al actualizar usuario"));
     });
   }
+  
+
+// function eliminarProducto(id_usuario) {
+//     if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
+
+//     fetch(API_URL, {
+//       method: "DELETE",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ id_usuario }),
+//     })
+//       .then(res => res.json())
+//       .then(json => {
+//         if (json.estado === "Exito") {
+//           alert("Usuario eliminado correctamente");
+//           cargarUsuarios();
+//         } else {
+//           alert("Error al eliminar usuario");
+//         }
+//       })
+//       .catch(() => alert("Error al eliminar usuario"));
+//   }
+
+
+
+
 
   // función para cargar productos
+//   function cargarProductos() {
+//     if (!productosTbody) return;
+//     fetch(PRODUCTS_API)
+//       .then(res => res.json())
+//       .then(json => {
+//         productosTbody.innerHTML = "";
+//         if (json && json.estado === "Exito" && Array.isArray(json.data)) {
+//           json.data.forEach(p => {
+//             const tr = document.createElement("tr");
+//             tr.innerHTML = `
+//               <td>${p.id_producto}</td>
+//               <td>${escapeHtml(p.nombre)}</td>
+//               <td>${Number(p.precio).toFixed(2)} €</td>
+//               <td>${p.disponible == 1 ? 'Sí' : 'No'}</td>
+//               <td>
+//                 <button class="btn btn-sm btn-outline-primary" onclick="window.location.href='/Modelo-Vista-Controlador/index.php?controller=productos&action=editar&id=${p.id_producto}'">Editar</button>
+//                 <button class="btn btn-sm btn-outline-danger" onclick="if(confirm('Eliminar producto?')) window.location.href='/Modelo-Vista-Controlador/index.php?controller=productos&action=eliminar&id=${p.id_producto}'">Eliminar</button>
+//               </td>
+//             `;
+//             productosTbody.appendChild(tr);
+//           });
+//         } else {
+//           productosTbody.innerHTML = `<tr><td colspan="5" class="text-muted">No se encontraron productos.</td></tr>`;
+//         }
+//       })
+//       .catch(err => {
+//         console.error('Error cargando productos error', err);
+//         if (productosTbody) productosTbody.innerHTML = `<tr><td colspan="5" class="text-danger">Error cargando productoss</td></tr>`;
+//       });
+//   }
+
+//   // llamar cargarProductos al inicio (opcional) y cuando se pulsa el botón Productos del menú
+//   window.cargarProductos = cargarProductos;
+//   cargarProductos();
+
+//   // detectar clicks en el menú para recargar productos cuando se activa la sección productos
+//   document.querySelectorAll('.menu-btn').forEach(btn => {
+//     btn.addEventListener('click', () => {
+//       if (btn.dataset.target === 'sec-productos') {
+//         cargarProductos();
+//       }
+//     });
+//   });
+
+//   cargarUsuarios();
+// });
+
+// function escapeHtml(html) {
+//   const text = document.createElement('textarea');
+//   text.innerHTML = html;
+//   return text.value;
+// }
   function cargarProductos() {
     if (!productosTbody) return;
+
     fetch(PRODUCTS_API)
       .then(res => res.json())
       .then(json => {
         productosTbody.innerHTML = "";
-        if (json && json.estado === "Exito" && Array.isArray(json.data)) {
+
+        if (json.estado === "Exito") {
           json.data.forEach(p => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
               <td>${p.id_producto}</td>
-              <td>${escapeHtml(p.nombre)}</td>
-              <td>${Number(p.precio).toFixed(2)} €</td>
-              <td>${p.disponible == 1 ? 'Sí' : 'No'}</td>
+              <td>${p.nombre}</td>
+              <td>${p.descripcion}</td>
+              <td>${p.precio} €</td>
+              <td>${p.categoria}</td>
+              <td><img src="${p.imagen_url}" width="50"></td>
               <td>
-                <button class="btn btn-sm btn-outline-primary" onclick="window.location.href='/Modelo-Vista-Controlador/index.php?controller=productos&action=editar&id=${p.id_producto}'">Editar</button>
-                <button class="btn btn-sm btn-outline-danger" onclick="if(confirm('Eliminar producto?')) window.location.href='/Modelo-Vista-Controlador/index.php?controller=productos&action=eliminar&id=${p.id_producto}'">Eliminar</button>
+                <button class="btn btn-sm btn-primary">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
               </td>
             `;
             productosTbody.appendChild(tr);
           });
-        } else {
-          productosTbody.innerHTML = `<tr><td colspan="5" class="text-muted">No se encontraron productos.</td></tr>`;
         }
       })
-      .catch(err => {
-        console.error('Error cargando productos', err);
-        if (productosTbody) productosTbody.innerHTML = `<tr><td colspan="5" class="text-danger">Error cargando productos</td></tr>`;
-      });
+      .catch(err => console.error("Error productos:", err));
   }
-
-  // llamar cargarProductos al inicio (opcional) y cuando se pulsa el botón Productos del menú
-  window.cargarProductos = cargarProductos;
-  cargarProductos();
-
-  // detectar clicks en el menú para recargar productos cuando se activa la sección productos
-  document.querySelectorAll('.menu-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (btn.dataset.target === 'sec-productos') {
-        cargarProductos();
-      }
-    });
-  });
-
-  cargarUsuarios();
+cargarUsuarios();
+cargarProductos();
 });
 
-function escapeHtml(html) {
-  const text = document.createElement('textarea');
-  text.innerHTML = html;
-  return text.value;
-}

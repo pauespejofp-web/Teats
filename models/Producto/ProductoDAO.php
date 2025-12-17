@@ -1,7 +1,8 @@
 <?php
 
-include_once 'models/Producto/Producto.php';
-include_once 'database/database.php';
+// Reemplazar includes con rutas relativas a este directorio
+include_once __DIR__ . '/Producto.php';
+include_once __DIR__ . '/../../database/database.php';
 
 class ProductoDAO
 {

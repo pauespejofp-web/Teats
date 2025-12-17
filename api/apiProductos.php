@@ -66,35 +66,35 @@ switch ($metodo) {
         }
         break;
 
-
+    }
 
 
     //POST:
 
 
 
-    case 'POST':
-        $data = json_decode(file_get_contents("php://input"), true);
-        if (isset($data['nombre'], $data['email'], $data['password'])) {
-            $usuario = new Usuario();
-            $usuario->setnombre($data['nombre']);
-            $usuario->setEmail($data['email']);
-            $usuario->setContraseña(password_hash($data['password'], PASSWORD_BCRYPT));
+    // case 'POST':
+    //     $data = json_decode(file_get_contents("php://input"), true);
+    //     if (isset($data['nombre'], $data['email'], $data['password'])) {
+    //         $usuario = new Usuario();
+    //         $usuario->setnombre($data['nombre']);
+    //         $usuario->setEmail($data['email']);
+    //         $usuario->setContraseña(password_hash($data['password'], PASSWORD_BCRYPT));
 
-            $resultado = UsuarioDao::insert($usuario);
+    //         $resultado = UsuarioDao::insert($usuario);
 
-            if ($resultado) {
+    //         if ($resultado) {
 
-                echo json_encode(['estado' => 'Exito']);
-            } else {
+    //             echo json_encode(['estado' => 'Exito']);
+    //         } else {
 
-                echo json_encode(['estado' => 'Fallido']);
-            }
-        } else {
-            http_response_code(400);
-            echo json_encode(['estado' => 'Fallido', 'data' => 'Faltan datos']);
-        }
-        break;
+    //             echo json_encode(['estado' => 'Fallido']);
+    //         }
+    //     } else {
+    //         http_response_code(400);
+    //         echo json_encode(['estado' => 'Fallido', 'data' => 'Faltan datos']);
+    //     }
+    //     break;
 
 
 
@@ -103,31 +103,31 @@ switch ($metodo) {
 
 
 
-    case 'PUT':
-        $data = json_decode(file_get_contents("php://input"), true);
-        if (isset($data['id_usuario'], $data['nombre'], $data['email'])) {
-            $usuario = UsuarioDao::getById(intval($data['id_usuario']));
-            if ($usuario) {
-                $usuario->setNombre($data['nombre']);
-                $usuario->setEmail($data['email']);
-                if (!empty($data['password'])) {
-                    $usuario->setContraseña(password_hash($data['password'], PASSWORD_BCRYPT));
-                }
-                $resultado = UsuarioDao::editar($usuario);
-                if ($resultado) {
-                    echo json_encode(['estado' => 'Exito']);
-                } else {
-                    echo json_encode(['estado' => 'Fallido']);
-                }
-            } else {
-                http_response_code(404);
-                echo json_encode(['estado' => 'Fallido', 'data' => 'Usuario no encontrado']);
-            }
-        } else {
-            http_response_code(400);
-            echo json_encode(['estado' => 'Fallido', 'data' => 'Faltan datos']);
-        }
-        break;
+    // case 'PUT':
+    //     $data = json_decode(file_get_contents("php://input"), true);
+    //     if (isset($data['id_usuario'], $data['nombre'], $data['email'])) {
+    //         $usuario = UsuarioDao::getById(intval($data['id_usuario']));
+    //         if ($usuario) {
+    //             $usuario->setNombre($data['nombre']);
+    //             $usuario->setEmail($data['email']);
+    //             if (!empty($data['password'])) {
+    //                 $usuario->setContraseña(password_hash($data['password'], PASSWORD_BCRYPT));
+    //             }
+    //             $resultado = UsuarioDao::editar($usuario);
+    //             if ($resultado) {
+    //                 echo json_encode(['estado' => 'Exito']);
+    //             } else {
+    //                 echo json_encode(['estado' => 'Fallido']);
+    //             }
+    //         } else {
+    //             http_response_code(404);
+    //             echo json_encode(['estado' => 'Fallido', 'data' => 'Usuario no encontrado']);
+    //         }
+    //     } else {
+    //         http_response_code(400);
+    //         echo json_encode(['estado' => 'Fallido', 'data' => 'Faltan datos']);
+    //     }
+    //     break;
 
 
 
@@ -141,30 +141,30 @@ switch ($metodo) {
     //DELETE:
 
 
-    case 'DELETE':
-        $data = json_decode(file_get_contents("php://input"), true);
+    // case 'DELETE':
+    //     $data = json_decode(file_get_contents("php://input"), true);
 
-        if (isset($data['id_usuario'])) {
-            $usuario = UsuarioDao::getById(intval($data['id_usuario']));
+    //     if (isset($data['id_usuario'])) {
+    //         $usuario = UsuarioDao::getById(intval($data['id_usuario']));
 
-            if ($usuario) {
-                $resultado = UsuarioDao::eliminar($usuario);
+    //         if ($usuario) {
+    //             $resultado = UsuarioDao::eliminar($usuario);
 
-                if ($resultado) {
-                    echo json_encode(['estado' => 'Exito']);
-                } else {
-                    echo json_encode(['estado' => 'Fallido']);
-                }
-            } else {
-                http_response_code(404);
-                echo json_encode(['estado' => 'Fallido', 'data' => 'Usuario no encontrado']);
-            }
-        } else {
-            http_response_code(400);
-            echo json_encode(['estado' => 'Fallido', 'data' => 'Falta id_usuario']);
-        }
-        break;
-}
+    //             if ($resultado) {
+    //                 echo json_encode(['estado' => 'Exito']);
+    //             } else {
+    //                 echo json_encode(['estado' => 'Fallido']);
+    //             }
+    //         } else {
+    //             http_response_code(404);
+    //             echo json_encode(['estado' => 'Fallido', 'data' => 'Usuario no encontrado']);
+    //         }
+    //     } else {
+    //         http_response_code(400);
+    //         echo json_encode(['estado' => 'Fallido', 'data' => 'Falta id_usuario']);
+    //     }
+    //     break;
+
 ?>
 
 
@@ -180,31 +180,3 @@ switch ($metodo) {
 
 
 
-
-
-
-header("Content-Type: application/json; charset=UTF-8");
-
-include_once __DIR__ . '/../database/database.php';
-
-try {
-$con = DataBase::connect();
-$sql = "SELECT id_producto, nombre, descripcion, precio, categoria_id, imagen_url, disponible FROM producto";
-$stmt = $con->prepare($sql);
-if (!$stmt) {
-throw new Exception("Prepare failed: " . $con->error);
-}
-$stmt->execute();
-$result = $stmt->get_result();
-$lista = [];
-while ($row = $result->fetch_assoc()) {
-$lista[] = $row;
-}
-$stmt->close();
-$con->close();
-echo json_encode(['estado' => 'Exito', 'data' => $lista]);
-} catch (Throwable $e) {
-http_response_code(500);
-error_log("get_products error: " . $e->getMessage());
-echo json_encode(['estado' => 'Fallido', 'data' => 'Error interno']);
-}
