@@ -6,9 +6,7 @@ include_once __DIR__ . '/../../database/database.php';
 
 class ProductoDAO
 {
-    // ===============================
-    //  OBTENER TODOS LOS PRODUCTOS
-    // ===============================
+
     public static function getAll()
     {
         $con = DataBase::connect();
@@ -26,9 +24,6 @@ class ProductoDAO
         return $lista;
     }
 
-    // ===============================
-    //  OBTENER PRODUCTO POR ID
-    // ===============================
     public static function getById($id)
     {
         $con = DataBase::connect();
@@ -43,9 +38,6 @@ class ProductoDAO
         return $producto;
     }
 
-    // ===============================
-    //  INSERTAR NUEVO PRODUCTO
-    // ===============================
     public static function insert($producto)
     {
         $con = DataBase::connect();

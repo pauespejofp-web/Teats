@@ -155,25 +155,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
 
-// function eliminarProducto(id_usuario) {
-//     if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
+function eliminarProducto(id_producto) {
+    if (!confirm("¿Seguro que deseas eliminar este Producto?")) return;
 
-//     fetch(API_URL, {
-//       method: "DELETE",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ id_usuario }),
-//     })
-//       .then(res => res.json())
-//       .then(json => {
-//         if (json.estado === "Exito") {
-//           alert("Usuario eliminado correctamente");
-//           cargarUsuarios();
-//         } else {
-//           alert("Error al eliminar usuario");
-//         }
-//       })
-//       .catch(() => alert("Error al eliminar usuario"));
-//   }
+    fetch(PRODUCTS_API, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_producto }),
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.estado === "Exito") {
+          alert("Producto eliminado correctamente");
+          cargarProductos();
+        } else {
+          alert("Error al eliminar Producto");
+        }
+      })
+      .catch(() => alert("Error al eliminar Producto"));
+  }
 
 
 
@@ -264,16 +264,27 @@ document.addEventListener("DOMContentLoaded", () => {
               <td>${p.precio} €</td>
               <td>${p.categoria}</td>
               <td>
-                <button class="btn btn-sm btn-primary">Editar</button>
-                <button class="btn btn-sm btn-danger">Eliminar</button>
+                <button class="btn btn-sm btn-outline-primary btn-editar" data-id="${p.id_producto}">Editar</button>
+                <button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${p.id_producto}">Eliminar</button>
               </td>
             `;
             productosTbody.appendChild(tr);
           });
+           document.querySelectorAll(".btn-editar").forEach(btn => {
+            btn.addEventListener("click", () => editarProductos(btn.dataset.id));
+          });
+
+          document.querySelectorAll(".btn-eliminar").forEach(btn => {
+            btn.addEventListener("click", () => eliminarProducto(btn.dataset.id));
+          });
+
+        } else {
+          tbody.innerHTML =
+            `<tr><td colspan="4" class="text-muted">No se encontraron Productos.</td></tr>`;
         }
       })
       .catch(err => console.error("Error productos:", err));
-  }
+    }
 cargarUsuarios();
 cargarProductos();
 });

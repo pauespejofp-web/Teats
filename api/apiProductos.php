@@ -66,8 +66,34 @@ switch ($metodo) {
         }
         break;
 
-    }
 
+       //DELETE:
+
+
+    case 'DELETE':
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (isset($data['id_producto'])) {
+            $producto = ProductoDAO::getById(intval($data['id_producto']));
+
+            if ($producto) {
+                $resultado = ProductoDAO::eliminarProducto($producto);
+
+                if ($resultado) {
+                    echo json_encode(['estado' => 'Exito']);
+                } else {
+                    echo json_encode(['estado' => 'Fallido']);
+                }
+            } else {
+                http_response_code(404);
+                echo json_encode(['estado' => 'Fallido', 'data' => 'Producto no encontrado']);
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode(['estado' => 'Fallido', 'data' => 'Falta id_producto']);
+        }
+        break;
+    }
 
     //POST:
 
@@ -138,32 +164,7 @@ switch ($metodo) {
 
 
 
-    //DELETE:
-
-
-    // case 'DELETE':
-    //     $data = json_decode(file_get_contents("php://input"), true);
-
-    //     if (isset($data['id_usuario'])) {
-    //         $usuario = UsuarioDao::getById(intval($data['id_usuario']));
-
-    //         if ($usuario) {
-    //             $resultado = UsuarioDao::eliminar($usuario);
-
-    //             if ($resultado) {
-    //                 echo json_encode(['estado' => 'Exito']);
-    //             } else {
-    //                 echo json_encode(['estado' => 'Fallido']);
-    //             }
-    //         } else {
-    //             http_response_code(404);
-    //             echo json_encode(['estado' => 'Fallido', 'data' => 'Usuario no encontrado']);
-    //         }
-    //     } else {
-    //         http_response_code(400);
-    //         echo json_encode(['estado' => 'Fallido', 'data' => 'Falta id_usuario']);
-    //     }
-    //     break;
+ 
 
 ?>
 
