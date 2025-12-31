@@ -84,4 +84,5 @@ document.addEventListener('DOMContentLoaded', () => {
     const firstTarget = botonesMenu[0] && botonesMenu[0].dataset.target;
     if (firstTarget) activateSectionById(firstTarget);
   }
+  
 });

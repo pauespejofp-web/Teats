@@ -178,12 +178,14 @@ function eliminarProducto(id_producto) {
 
 
   function cargarProductos() {
-    if (!productosTbody) return;
+   
 
     fetch(PRODUCTS_API)
       .then(res => res.json())
       .then(json => {
         productosTbody.innerHTML = "";
+
+       
 
         if (json.estado === "Exito") {
           json.data.forEach(p => {
