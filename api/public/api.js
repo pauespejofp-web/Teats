@@ -218,6 +218,71 @@ function eliminarProducto(id_producto) {
       })
       .catch(err => console.error("Error productos:", err));
     }
+
+// Nuevo: cargar modal de edición para un producto
+function editarProductos(id) {
+  fetch(PRODUCTS_API + "?id=" + id)
+    .then(res => res.json())
+    .then(json => {
+      if (json && json.estado === "Exito") {
+        document.getElementById("edit-prod-id").value = json.data.id_producto;
+        document.getElementById("edit-prod-nombre").value = json.data.nombre || "";
+        document.getElementById("edit-prod-precio").value = json.data.precio ?? "";
+        document.getElementById("edit-prod-descripcion").value = json.data.descripcion || "";
+        document.getElementById("edit-prod-categoria").value = json.data.categoria ?? "";
+        document.getElementById("edit-prod-imagen").value = json.data.imagen_url || "";
+        document.getElementById("edit-prod-feedback").textContent = "";
+
+        const modalEl = document.getElementById("editarProductoModal");
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+      } else {
+        alert("Producto no encontrado");
+      }
+    })
+    .catch(() => alert("Error al obtener producto"));
+}
+
+const editarProductoForm = document.getElementById("editar-producto-form");
+const editarProductoModalEl = document.getElementById("editarProductoModal");
+if (editarProductoForm) {
+  editarProductoForm.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const id_producto = document.getElementById("edit-prod-id").value;
+    const nombre = document.getElementById("edit-prod-nombre").value;
+    const precio = parseFloat(document.getElementById("edit-prod-precio").value) || 0;
+    const descripcion = document.getElementById("edit-prod-descripcion").value;
+    const categoria = document.getElementById("edit-prod-categoria").value;
+    const imagen_url = document.getElementById("edit-prod-imagen").value;
+    const feedback = document.getElementById("edit-prod-feedback");
+
+    feedback.textContent = "Guardando...";
+    fetch(PRODUCTS_API, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_producto, nombre, descripcion, precio, categoria, imagen_url })
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json && json.estado === "Exito") {
+          const modalInstance = bootstrap.Modal.getInstance(editarProductoModalEl);
+          if (modalInstance) modalInstance.hide();
+          alert("Producto actualizado correctamente");
+          cargarProductos();
+        } else {
+          feedback.textContent = "Error al actualizar producto";
+        }
+      })
+      .catch(() => {
+        feedback.textContent = "Error al actualizar producto";
+      })
+      .finally(() => {
+        setTimeout(() => feedback.textContent = "", 2000);
+      });
+  });
+}
+
 cargarUsuarios();
 cargarProductos();
 });
