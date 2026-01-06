@@ -5,7 +5,6 @@ session_start();
 $controller = $_GET['controller'] ?? 'home';
 $action     = $_GET['action'] ?? 'inicio';
 
-
 switch ($controller) {
 
     case 'usuario':
@@ -14,7 +13,17 @@ switch ($controller) {
 
         if (method_exists($obj, $action)) {
             $obj->$action();
-            exit;
+        } else {
+            echo "Acción no válida";
+        }
+        break;
+
+    case 'productos':
+        include_once 'controllers/ProductosController.php';
+        $obj = new ProductosController();
+
+        if (method_exists($obj, $action)) {
+            $obj->$action();
         } else {
             echo "Acción no válida";
         }
@@ -22,17 +31,9 @@ switch ($controller) {
 
     case 'home':
         include_once "vista/usuario/home/home.php";
-        exit;
+        break;
 
     default:
         echo "Controlador no válido";
-        exit;
-    case 'productos':
-        include_once 'controllers/ProductosController.php';
-        $controllerObj = new ProductosController();
-
-        if (method_exists($controllerObj, $action)) {
-            $controllerObj->$action();
-            exit;
-        }
+        break;
 }

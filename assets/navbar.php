@@ -52,12 +52,12 @@ if (session_status() === PHP_SESSION_NONE) {
                 <img src="assets/sga/interrogacion.svg" alt="Ayuda" class="me-2" width="24" height="24">
                 <img src="assets/sga/internet.svg" alt="Internet" class="me-2" width="24" height="24">
                 <?php if (isset($_SESSION['usuario'])): ?>
-                    <a href="/Modelo-Vista-Controlador/vista/producto/productos.php">
-                    <?php else: ?>
-                        <a href="index.php?controller=usuario&action=loginForm">
-                        <?php endif; ?>
-                        <img src="assets/sga/usuario.svg" alt="Usuario" class="me-2" width="38" height="38">
-                        </a>
+                <a href="index.php?controller=productos&action=inicio">
+                <?php else: ?>
+                <a href="index.php?controller=usuario&action=loginForm">
+                <?php endif; ?>
+                <img src="assets/sga/usuario.svg" alt="Usuario" class="me-2" width="38" height="38">
+                </a>
             </div>
         </div>
         <?php if (isset($_SESSION['usuario'])): ?>
