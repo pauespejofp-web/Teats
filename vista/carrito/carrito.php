@@ -36,12 +36,12 @@
     <div class="container d-flex align-items-center">
         <strong class="me-4 fs-4">TIENDA</strong>
         <nav class="nav d-none d-lg-flex">
-            <a href="productos.php" class="nav-link">Inicio</a>
-            <a href="productos.php" class="nav-link">Productos</a>
+            <a href="index.php?" class="nav-link">Inicio</a>
+            <a href="index.php?controller=productos&action=inicio" class="nav-link">Productos</a>
             <a href="#" class="nav-link">Contacto</a>
         </nav>
         <div class="ms-auto">
-            <a href="productos.php" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Volver</a>
+            <a href="index.php?controller=productos&action=inicio" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Volver</a>
         </div>
     </div>
 </header>
