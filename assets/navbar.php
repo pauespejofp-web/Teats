@@ -30,11 +30,11 @@ if (session_status() === PHP_SESSION_NONE) {
                 </li>
 
                 <li class="nav-item mx-3">
-                    <a class="nav-link" href="tienda.php">Tienda</a>
+                    <a class="nav-link" href="index.php?controller=productos&action=inicio">Productos</a>
                 </li>
 
                 <li class="nav-item mx-3">
-                    <a class="nav-link" href="contacto.php">Contacto</a>
+                    <a class="nav-link" href="contacto.php"></a>
                 </li>
 
             </ul>
