@@ -24,9 +24,7 @@ switch ($controller) {
         include_once "vista/usuario/home/home.php";
         exit;
 
-    default:
-        echo "Controlador no válido";
-        exit;
+    
     case 'productos':
         include_once 'controllers/productosController.php';
         $controllerObj = new ProductosController();
@@ -46,4 +44,17 @@ switch ($controller) {
             echo "Acción de carrito no válida";
             exit;
         }
+    case 'pedidos':
+    include_once 'controllers/PedidosController.php';
+    $obj = new PedidosController();
+    if (method_exists($obj, $action)) {
+        $obj->$action();
+        exit;
+    } else {
+        echo "Acción de pedidos no válida";
+        exit;
+    }
+    default:
+        echo "Controlador no válido";
+        exit;
 }

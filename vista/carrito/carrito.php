@@ -1,4 +1,4 @@
-<?php
+<?php 
 // Página de carrito - todo el contenido del carrito se renderiza desde JS leyendo localStorage('cart')
 ?>
 <!doctype html>
@@ -38,13 +38,9 @@
         <nav class="nav d-none d-lg-flex">
             <a href="productos.php" class="nav-link">Inicio</a>
             <a href="productos.php" class="nav-link">Productos</a>
-            <a href="index.php?" class="nav-link">Inicio</a>
-            <a href="index.php?controller=productos&action=inicio" class="nav-link">Productos</a>
-            <a href="#" class="nav-link">Contacto</a>
         </nav>
         <div class="ms-auto">
             <a href="productos.php" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Volver</a>
-            <a href="index.php?controller=productos&action=inicio" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Volver</a>
         </div>
     </div>
 </header>
@@ -70,7 +66,13 @@
                 <div class="summary-row"><strong>Subtotal</strong><strong id="subtotal">0.00€</strong></div>
                 <div class="summary-row"><small class="text-muted">Iva Incluido</small></div>
                 <div style="height:12px"></div>
-                <button id="checkout" class="checkout-btn">Caja</button>
+
+                <!-- FORMULARIO OCULTO PARA HACER POST -->
+                <form id="checkout-form" action="index.php?controller=pedidos&action=crear" method="POST">
+                    <input type="hidden" name="cart_data" id="cart_data">
+                    <button id="checkout" class="checkout-btn" type="button">Caja</button>
+                </form>
+
             </div>
         </div>
     </div>
@@ -99,7 +101,6 @@ function renderCart() {
 
     container.innerHTML = "";
     let subtotal = 0;
-
     const ids = Object.keys(cart);
 
     if (ids.length === 0) {
@@ -144,11 +145,7 @@ function renderCart() {
 function changeQty(id, change) {
     const cart = getCart();
     cart[id].cantidad += change;
-
-    if (cart[id].cantidad < 1) {
-        cart[id].cantidad = 1;
-    }
-
+    if (cart[id].cantidad < 1) cart[id].cantidad = 1;
     saveCart(cart);
 }
 
@@ -159,7 +156,7 @@ function removeItem(id) {
     saveCart(cart);
 }
 
-// Checkout
+// Checkout: llenar formulario y enviar
 document.getElementById("checkout").addEventListener("click", () => {
     const cart = getCart();
     if (Object.keys(cart).length === 0) {
@@ -167,15 +164,18 @@ document.getElementById("checkout").addEventListener("click", () => {
         return;
     }
 
-    alert("Compra realizada (ejemplo)");
+    // Guardar carrito en el input oculto
+    document.getElementById("cart_data").value = JSON.stringify(cart);
+
+    // Enviar formulario
+    document.getElementById("checkout-form").submit();
+
+    // Opcional: vaciar carrito local
     localStorage.removeItem(CART_KEY);
-    renderCart();
 });
 
-// Inicializar
 renderCart();
 </script>
-
 
 </body>
 </html>

@@ -1,38 +1,30 @@
 <?php
-include_once __DIR__ . '/../models/LineaPedido.php';
-include_once __DIR__ . '/../database/database.php';
+include_once __DIR__ . '/LineaPedido.php';
+include_once __DIR__ . '/../../database/database.php';
 
 class LineaPedidoDao {
 
-    public static function getByPedido($id_pedido) {
+    public static function insert(LineaPedido $linea) {
         $con = DataBase::connect();
-        $stmt = $con->prepare("SELECT * FROM Linea_Pedido WHERE id_pedido = ?");
-        $stmt->bind_param("i", $id_pedido);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $lista = [];
-        while ($l = $result->fetch_object('LineaPedido')) {
-            $lista[] = $l;
-        }
-        $con->close();
-        return $lista;
-    }
 
-    public static function insert(LineaPedido $lp) {
-        $con = DataBase::connect();
         $stmt = $con->prepare(
-            "INSERT INTO Linea_Pedido(id_pedido, id_producto, cantidad, precio_unitario)
+            "INSERT INTO linea_pedido (id_pedido, id_producto, cantidad, precio_unitario)
              VALUES (?, ?, ?, ?)"
         );
-        $stmt->bind_param(
-            "iiid",
-            $lp->getIdPedido(),
-            $lp->getIdProducto(),
-            $lp->getCantidad(),
-            $lp->getPrecioUnitario()
-        );
+        $idPedido  = $linea->getIdPedido();
+        $idProducto = $linea->getIdProducto();
+        $cantidad  = $linea->getCantidad();
+        $precio    = $linea->getPrecioUnitario();
+
+        $stmt->bind_param("iiid", $idPedido, $idProducto, $cantidad, $precio);
+
         $stmt->execute();
+        $inserted = $stmt->affected_rows > 0;
+
+        $stmt->close();
         $con->close();
+
+        return $inserted;
     }
 }
 ?>

@@ -28,25 +28,32 @@ class PedidoDao {
     }
 
     public static function insert(Pedido $p) {
-        $con = DataBase::connect();
-        $stmt = $con->prepare(
-            "INSERT INTO Pedido(id_usuario, fecha_pedido, hora_pedido, importe, estado)
-             VALUES (?, ?, ?, ?, ?)"
-        );
-        $stmt->bind_param(
-            "issds",
-            $p->getIdUsuario(),
-            $p->getFechaPedido(),
-            $p->getHoraPedido(),
-            $p->getImporte(),
-            $p->getEstado()
-        );
-        $stmt->execute();
-        $inserted = $stmt->affected_rows > 0;
-        $stmt->close();
-        $con->close();
-        return $inserted;
+    $con = DataBase::connect();
+    $stmt = $con->prepare(
+        "INSERT INTO Pedido(id_usuario, fecha_pedido, hora_pedido, importe, estado)
+         VALUES (?, ?, ?, ?, ?)"
+    );
+    $idUsuario = $p->getIdUsuario();
+$fecha     = $p->getFechaPedido();
+$hora      = $p->getHoraPedido();
+$importe   = $p->getImporte();
+$estado    = $p->getEstado();
+
+$stmt->bind_param("issds", $idUsuario, $fecha, $hora, $importe, $estado);
+    $stmt->execute();
+
+    if ($stmt->affected_rows > 0) {
+        $p->setIdPedido($con->insert_id);
+        $inserted = true;
+    } else {
+        $inserted = false;
     }
+
+    $stmt->close();
+    $con->close();
+    return $inserted;
+}
+
 
     public static function editarPedido(Pedido $p) {
         $con = DataBase::connect();
