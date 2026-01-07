@@ -28,11 +28,22 @@ switch ($controller) {
         echo "Controlador no válido";
         exit;
     case 'productos':
-        include_once 'controllers/ProductosController.php';
+        include_once 'controllers/productosController.php';
         $controllerObj = new ProductosController();
 
         if (method_exists($controllerObj, $action)) {
             $controllerObj->$action();
+            exit;
+        }
+
+     case 'carrito':
+        include_once 'controllers/CarritoController.php';
+        $obj = new CarritoController();
+        if (method_exists($obj, $action)) {
+            $obj->$action();
+            exit;
+        } else {
+            echo "Acción de carrito no válida";
             exit;
         }
 }

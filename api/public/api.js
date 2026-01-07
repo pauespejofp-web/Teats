@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const API_URL = "../api.php";
   const PRODUCTS_API = "../apiProductos.php";
+  const PEDIDOS_API = "../apiPedidos.php";
 
   const tbody = document.getElementById("usuarios-body");
   const editarForm = document.getElementById("editar-form");
@@ -10,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const addModal = document.getElementById("modalAddUser");
 
   const productosTbody = document.getElementById("productos-body");
+  const pedidosTbody = document.getElementById("pedidos-body");
 
   function cargarUsuarios() {
     fetch(API_URL)
@@ -155,28 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
 
-function eliminarProducto(id_producto) {
-    if (!confirm("¿Seguro que deseas eliminar este Producto?")) return;
-
-    fetch(PRODUCTS_API, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id_producto }),
-    })
-      .then(res => res.json())
-      .then(json => {
-        if (json.estado === "Exito") {
-          alert("Producto eliminado correctamente");
-          cargarProductos();
-        } else {
-          alert("Error al eliminar Producto");
-        }
-      })
-      .catch(() => alert("Error al eliminar Producto"));
-  }
-
-
-
   function cargarProductos() {
    
 
@@ -220,6 +200,117 @@ function eliminarProducto(id_producto) {
       })
       .catch(err => console.error("Error productos:", err));
     }
+    
+    // PEDIDOS CRUD
+  function cargarPedidos() {
+    if (!pedidosTbody) return;
+    fetch(PEDIDOS_API)
+      .then(res => res.json())
+      .then(json => {
+        pedidosTbody.innerHTML = "";
+        if (json && json.estado === "Exito" && Array.isArray(json.data)) {
+          json.data.forEach(p => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${p.id_pedido}</td>
+              <td>${p.id_usuario}</td>
+              <td>${p.fecha_pedido}</td>
+              <td>${p.hora_pedido}</td>
+              <td>${p.importe} €</td>
+              <td>${p.estado}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary btn-editar-ped" data-id="${p.id_pedido}">Editar</button>
+                <button class="btn btn-sm btn-outline-danger btn-eliminar-ped" data-id="${p.id_pedido}">Eliminar</button>
+              </td>
+            `;
+            pedidosTbody.appendChild(tr);
+          });
+          pedidosTbody.querySelectorAll(".btn-editar-ped").forEach(btn => {
+            btn.addEventListener("click", () => editarPedido(btn.dataset.id));
+          });
+          pedidosTbody.querySelectorAll(".btn-eliminar-ped").forEach(btn => {
+            btn.addEventListener("click", () => eliminarPedido(btn.dataset.id));
+          });
+        } else {
+          pedidosTbody.innerHTML = `<tr><td colspan="7" class="text-muted">No se encontraron pedidos.</td></tr>`;
+        }
+      })
+      .catch(() => {
+        pedidosTbody.innerHTML = `<tr><td colspan="7" class="text-danger">Error cargando pedidos</td></tr>`;
+      });
+  }
+
+  function editarPedido(id) {
+    fetch(PEDIDOS_API + "?id=" + id)
+      .then(res => res.json())
+      .then(json => {
+        if (json && json.estado === "Exito") {
+          document.getElementById("edit-ped-id").value = json.data.id_pedido;
+          document.getElementById("edit-ped-usuario").value = json.data.id_usuario;
+          document.getElementById("edit-ped-fecha").value = json.data.fecha_pedido;
+          document.getElementById("edit-ped-hora").value = json.data.hora_pedido;
+          document.getElementById("edit-ped-importe").value = json.data.importe;
+          document.getElementById("edit-ped-estado").value = json.data.estado;
+          const modal = new bootstrap.Modal(document.getElementById("editarPedidoModal"));
+          modal.show();
+        } else {
+          alert("Pedido no encontrado");
+        }
+      })
+      .catch(() => alert("Error al obtener pedido"));
+  }
+
+  function eliminarPedido(id_pedido) {
+    if (!confirm("¿Seguro que deseas eliminar este pedido?")) return;
+    fetch(PEDIDOS_API, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_pedido }),
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.estado === "Exito") {
+          alert("Pedido eliminado correctamente");
+          cargarPedidos();
+        } else {
+          alert("Error al eliminar pedido");
+        }
+      })
+      .catch(() => alert("Error al eliminar pedido"));
+  }
+
+  const editarPedidoForm = document.getElementById("editar-pedido-form");
+  if (editarPedidoForm) {
+    editarPedidoForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const id_pedido = document.getElementById("edit-ped-id").value;
+      const id_usuario = document.getElementById("edit-ped-usuario").value;
+      const fecha_pedido = document.getElementById("edit-ped-fecha").value;
+      const hora_pedido = document.getElementById("edit-ped-hora").value;
+      const importe = document.getElementById("edit-ped-importe").value;
+      const estado = document.getElementById("edit-ped-estado").value;
+
+      fetch(PEDIDOS_API, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_pedido, id_usuario, fecha_pedido, hora_pedido, importe, estado }),
+      })
+        .then(res => res.json())
+        .then(json => {
+          if (json.estado === "Exito") {
+            const modal = bootstrap.Modal.getInstance(document.getElementById("editarPedidoModal"));
+            modal.hide();
+            alert("Pedido actualizado correctamente");
+            cargarPedidos();
+          } else {
+            alert("Error al actualizar pedido");
+          }
+        })
+        .catch(() => alert("Error al actualizar pedido"));
+    });
+  }
+  
 cargarUsuarios();
 cargarProductos();
+cargarPedidos();
 });
