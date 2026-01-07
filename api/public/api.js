@@ -310,7 +310,84 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
-cargarUsuarios();
-cargarProductos();
-cargarPedidos();
+ function editarProductos(id) {
+  fetch(PRODUCTS_API + "?id=" + id)
+    .then(res => res.json())
+    .then(json => {
+      if (!(json && (json.estado === "Exito" || json.estado === "OK") && json.data)) {
+        alert("Producto no encontrado");
+        return;
+      }
+
+      const p = json.data;
+
+      document.getElementById("edit-prod-id").value = p.id_producto;
+      document.getElementById("edit-prod-nombre").value = p.nombre;
+      document.getElementById("edit-prod-descripcion").value = p.descripcion || "";
+      document.getElementById("edit-prod-precio").value = p.precio;
+      document.getElementById("edit-prod-categoria").value = p.categoria || "";
+      document.getElementById("edit-prod-imagen").value = p.imagen_url || "";
+
+      const modal = new bootstrap.Modal(document.getElementById("editarProductoModal"));
+      modal.show();
+    })
+    .catch(() => alert("Error al obtener producto"));
+}
+
+
+const editarProductoForm = document.getElementById("editar-producto-form");
+if (editarProductoForm) {
+  editarProductoForm.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const id_producto = document.getElementById("edit-prod-id").value;
+    const nombre = document.getElementById("edit-prod-nombre").value;
+    const descripcion = document.getElementById("edit-prod-descripcion").value;
+    const precio = parseFloat(document.getElementById("edit-prod-precio").value);
+    const categoria = document.getElementById("edit-prod-categoria").value;
+    const imagen_url = document.getElementById("edit-prod-imagen").value;
+
+    fetch(PRODUCTS_API, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_producto, nombre, descripcion, precio, categoria, imagen_url })
+    })
+      .then(res => res.json())
+      .then(resp => {
+        if (resp && (resp.estado === "Exito" || resp.ok)) {
+          const modal = bootstrap.Modal.getInstance(document.getElementById("editarProductoModal"));
+          modal.hide();
+          alert("Producto actualizado correctamente");
+          cargarProductos();
+        } else {
+          alert("Error al actualizar producto: " + (resp.message || resp.mensaje || "Error"));
+        }
+      })
+      .catch(() => alert("Error al actualizar producto"));
+  });
+}
+
+
+  function eliminarProducto(id_producto) {
+    if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
+    fetch(PRODUCTS_API, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_producto }),
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json && (json.estado === "Exito" || json.ok)) {
+          alert("Producto eliminado correctamente");
+          cargarProductos();
+        } else {
+          alert("Error al eliminar producto");
+        }
+      })
+      .catch(() => alert("Error al eliminar producto"));
+  }
+
+  cargarUsuarios();
+  cargarProductos();
+  cargarPedidos();
 });

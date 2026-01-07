@@ -55,23 +55,27 @@ class UsuarioController
 
         if (password_verify($password, $usuario->getContraseña())) {
 
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
-
-            $_SESSION['usuario'] = $usuario;
-            header("Location: index.php");
-            exit;
-        } else {
-            header("Location: index.php?controller=usuario&action=loginForm&error=pass");
-            exit;
-        }
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
     }
 
+    $_SESSION['user_id'] = $usuario->getIdUsuario();
+    $_SESSION['user_name'] = $usuario->getNombre();
 
-    //================================
-    // LOGOUT
-    //================================
+    include_once 'controllers/LogController.php';
+    LogController::registrar(
+        $usuario->getIdUsuario(),
+        'login',
+        'Usuario inició sesión correctamente'
+    );
+
+    header("Location: index.php");
+    exit;
+}
+
+
+    }
+
     public function logout()
     {
         if (session_status() === PHP_SESSION_NONE) {

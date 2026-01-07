@@ -6,7 +6,6 @@ require_once 'models/lineapedido/LineaPedidoDAO.php';
 
 class PedidosController {
     public function crear() {
-        // Recibir carrito desde POST
         $cart = isset($_POST['cart_data']) ? json_decode($_POST['cart_data'], true) : [];
 
         if (count($cart) === 0) {
@@ -15,7 +14,12 @@ class PedidosController {
             exit;
         }
 
-        $idUsuario = $_SESSION['user_id'] ?? 34;
+        $idUsuario = $_SESSION['user_id'] ?? null;
+
+        if (!$idUsuario) {
+            header("Location: index.php?controller=usuario&action=loginForm");
+            exit;
+        }
 
         $fecha = date('Y-m-d');
         $hora = date('H:i:s');
@@ -23,8 +27,6 @@ class PedidosController {
         foreach ($cart as $item) {
             $importe += $item['precio'] * $item['cantidad'];
         }
-
-        // Crear Pedido
         $pedido = new Pedido();
         $pedido->setIdUsuario($idUsuario)
                ->setFechaPedido($fecha)
@@ -39,8 +41,6 @@ class PedidosController {
         }
 
         $idPedido = $pedido->getIdPedido();
-
-        // Insertar líneas del pedido
         foreach ($cart as $idProducto => $item) {
             $linea = new LineaPedido();
             $linea->setIdPedido($idPedido)
@@ -51,7 +51,6 @@ class PedidosController {
             LineaPedidoDao::insert($linea);
         }
 
-        // Redirigir a página de confirmación
         header("Location: index.php?controller=pedidos&action=confirmacion&id=".$idPedido);
         exit;
     }

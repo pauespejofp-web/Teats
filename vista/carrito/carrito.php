@@ -1,5 +1,4 @@
 <?php 
-// Página de carrito - todo el contenido del carrito se renderiza desde JS leyendo localStorage('cart')
 ?>
 <!doctype html>
 <html lang="es">
@@ -36,11 +35,11 @@
     <div class="container d-flex align-items-center">
         <strong class="me-4 fs-4">TIENDA</strong>
         <nav class="nav d-none d-lg-flex">
-            <a href="productos.php" class="nav-link">Inicio</a>
-            <a href="productos.php" class="nav-link">Productos</a>
+            <a href="index.php?controller=productos&action=inicio" class="nav-link">Inicio</a>
+            <a href="index.php?controller=productos&action=inicio" class="nav-link">Productos</a>
         </nav>
         <div class="ms-auto">
-            <a href="productos.php" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Volver</a>
+            <a href="index.php?controller=productos&action=inicio" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Volver</a>
         </div>
     </div>
 </header>
@@ -51,7 +50,6 @@
             <h3 class="mb-4">Carrito</h3>
 
             <div id="cart-list">
-                <!-- Items inyectados por JS -->
             </div>
 
             <div id="empty-msg" style="display:none;">
@@ -66,8 +64,15 @@
                 <div class="summary-row"><strong>Subtotal</strong><strong id="subtotal">0.00€</strong></div>
                 <div class="summary-row"><small class="text-muted">Iva Incluido</small></div>
                 <div style="height:12px"></div>
+                <div class="mb-3">
+    <label for="codigo-descuento" class="form-label">Código de descuento</label>
+    <div class="input-group">
+        <input type="text" id="codigo-descuento" class="form-control" placeholder="Introduce tu código">
+        <button type="button" id="aplicar-descuento" class="btn btn-outline-primary">Aplicar</button>
+    </div>
+    <div id="mensaje-descuento" class="small mt-1 text-success"></div>
+</div>
 
-                <!-- FORMULARIO OCULTO PARA HACER POST -->
                 <form id="checkout-form" action="index.php?controller=pedidos&action=crear" method="POST">
                     <input type="hidden" name="cart_data" id="cart_data">
                     <button id="checkout" class="checkout-btn" type="button">Caja</button>
@@ -81,18 +86,16 @@
 <script>
 const CART_KEY = "cart";
 
-// Leer carrito
+
 function getCart() {
     return JSON.parse(localStorage.getItem(CART_KEY)) || {};
 }
 
-// Guardar carrito
 function saveCart(cart) {
     localStorage.setItem(CART_KEY, JSON.stringify(cart));
     renderCart();
 }
 
-// Mostrar carrito
 function renderCart() {
     const cart = getCart();
     const container = document.getElementById("cart-list");
@@ -141,7 +144,6 @@ function renderCart() {
     subtotalEl.textContent = subtotal.toFixed(2) + "€";
 }
 
-// Cambiar cantidad
 function changeQty(id, change) {
     const cart = getCart();
     cart[id].cantidad += change;
@@ -149,14 +151,12 @@ function changeQty(id, change) {
     saveCart(cart);
 }
 
-// Eliminar producto
 function removeItem(id) {
     const cart = getCart();
     delete cart[id];
     saveCart(cart);
 }
 
-// Checkout: llenar formulario y enviar
 document.getElementById("checkout").addEventListener("click", () => {
     const cart = getCart();
     if (Object.keys(cart).length === 0) {
@@ -164,13 +164,10 @@ document.getElementById("checkout").addEventListener("click", () => {
         return;
     }
 
-    // Guardar carrito en el input oculto
     document.getElementById("cart_data").value = JSON.stringify(cart);
 
-    // Enviar formulario
     document.getElementById("checkout-form").submit();
 
-    // Opcional: vaciar carrito local
     localStorage.removeItem(CART_KEY);
 });
 
