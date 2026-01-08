@@ -54,8 +54,8 @@
                 <div class="card-overlay p-4">
                     <h4 class="card-title text-white"><?= $p->getNombre() ?></h4>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-primary btn-sm">Pedir ahora</button>
-                        <button class="btn btn-outline-light btn-sm">Añadir al carrito</button>
+                        <a href="index.php?controller=productos&action=inicio" class="btn btn-primary btn-sm">Pedir ahora</a>
+                        <a href="index.php?controller=productos&action=inicio" class="btn btn-outline-light btn-sm">Añadir al carrito</a>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                 <div class="card-body p-3">
                     <h6 class="card-title"><?= $p->getNombre() ?></h6>
                     <p class="card-text text-muted small"><?= $p->getDescripcion() ?></p>
-                    <button class="btn btn-dark btn-sm mt-2">Añadir al carrito</button>
+                    <a href="index.php?controller=productos&action=inicio" class="btn btn-dark btn-sm mt-2">Pedir ahora</a>
                 </div>
                 <img src="<?= $p->getImagenUrl() ?>" class="card-img-end" alt="<?= $p->getNombre() ?>">
             </div>

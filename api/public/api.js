@@ -11,14 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const productosTbody = document.getElementById("productos-body");
   const pedidosTbody = document.getElementById("pedidos-body");
 
-  // --- PEDIDOS FILTROS ---
   const filterUser = document.getElementById("filter-user");
   const filterDateStart = document.getElementById("filter-date-start");
   const filterDateEnd = document.getElementById("filter-date-end");
   const filterEstado = document.getElementById("filter-estado");
   const filterOrder = document.getElementById("filter-order");
 
-  let pedidosData = []; // Guardamos todos los pedidos
+  let pedidosData = [];
 
   function applyPedidoFilters() {
     if (!pedidosData) return;
@@ -61,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
       pedidosTbody.appendChild(tr);
     });
 
-    // Reasignamos eventos
     pedidosTbody.querySelectorAll(".btn-editar-ped").forEach(btn => {
       btn.addEventListener("click", () => editarPedido(btn.dataset.id));
     });
@@ -70,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- CARGAR USUARIOS ---
   function cargarUsuarios() {
     fetch(API_URL)
       .then(res => res.json())
@@ -189,7 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- CARGAR PRODUCTOS ---
   function cargarProductos() {
     fetch(PRODUCTS_API)
       .then(res => res.json())
@@ -212,19 +208,160 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
             productosTbody.appendChild(tr);
           });
+          productosTbody.querySelectorAll(".btn-editar").forEach(btn => {
+            btn.addEventListener("click", () => editarProducto(btn.dataset.id));
+          });
+          productosTbody.querySelectorAll(".btn-eliminar").forEach(btn => {
+            btn.addEventListener("click", () => eliminarProducto(btn.dataset.id));
+          });
         } else productosTbody.innerHTML = `<tr><td colspan="7" class="text-muted">No se encontraron Productos.</td></tr>`;
       })
       .catch(err => console.error("Error productos:", err));
   }
 
-  // --- CARGAR PEDIDOS ---
+  function editarProducto(id) {
+    fetch(PRODUCTS_API + "?id=" + id)
+      .then(res => res.json())
+      .then(json => {
+        if (json && json.estado === "Exito") {
+          const p = json.data;
+          document.getElementById("edit-prod-id").value = p.id_producto;
+          document.getElementById("edit-prod-nombre").value = p.nombre || "";
+          document.getElementById("edit-prod-precio").value = p.precio || "";
+          document.getElementById("edit-prod-descripcion").value = p.descripcion || "";
+          document.getElementById("edit-prod-categoria").value = p.categoria || "";
+          document.getElementById("edit-prod-imagen").value = p.imagen_url || "";
+          const modalEl = document.getElementById("editarProductoModal");
+          const modal = new bootstrap.Modal(modalEl);
+          modal.show();
+        } else alert("Producto no encontrado");
+      })
+      .catch(() => alert("Error al obtener producto"));
+  }
+
+  function eliminarProducto(id_producto) {
+    if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
+    fetch(PRODUCTS_API, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_producto }),
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.estado === "Exito") {
+          alert("Producto eliminado correctamente");
+          cargarProductos();
+        } else alert("Error al eliminar producto");
+      })
+      .catch(() => alert("Error al eliminar producto"));
+  }
+
+  // manejar submit del formulario de editar producto
+  const editarProductoForm = document.getElementById("editar-producto-form");
+  if (editarProductoForm) {
+    editarProductoForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const id_producto = document.getElementById("edit-prod-id").value;
+      const nombre = document.getElementById("edit-prod-nombre").value;
+      const precio = document.getElementById("edit-prod-precio").value;
+      const descripcion = document.getElementById("edit-prod-descripcion").value;
+      const categoria = document.getElementById("edit-prod-categoria").value;
+      const imagen_url = document.getElementById("edit-prod-imagen").value;
+
+      fetch(PRODUCTS_API, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_producto, nombre, descripcion, precio, categoria, imagen_url }),
+      })
+        .then(res => res.json())
+        .then(json => {
+          if (json.estado === "Exito") {
+            const modalEl = document.getElementById("editarProductoModal");
+            const modalInstance = bootstrap.Modal.getInstance(modalEl);
+            if (modalInstance) modalInstance.hide();
+            alert("Producto actualizado correctamente");
+            cargarProductos();
+          } else alert("Error al actualizar producto");
+        })
+        .catch(() => alert("Error al actualizar producto"));
+    });
+  }
+
+  // --- EDITAR / ELIMINAR PEDIDOS ---
+  function editarPedido(id) {
+    fetch(PEDIDOS_API + "?id=" + id)
+      .then(res => res.json())
+      .then(json => {
+        if (json && json.estado === "Exito") {
+          const p = json.data;
+          document.getElementById("edit-ped-id").value = p.id_pedido;
+          document.getElementById("edit-ped-usuario").value = p.id_usuario || "";
+          document.getElementById("edit-ped-fecha").value = p.fecha_pedido || "";
+          document.getElementById("edit-ped-hora").value = p.hora_pedido || "";
+          document.getElementById("edit-ped-importe").value = p.importe || "";
+          document.getElementById("edit-ped-estado").value = p.estado || "";
+          const modalEl = document.getElementById("editarPedidoModal");
+          const modal = new bootstrap.Modal(modalEl);
+          modal.show();
+        } else alert("Pedido no encontrado");
+      })
+      .catch(() => alert("Error al obtener pedido"));
+  }
+
+  function eliminarPedido(id_pedido) {
+    if (!confirm("¿Seguro que deseas eliminar este pedido?")) return;
+    fetch(PEDIDOS_API, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_pedido }),
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.estado === "Exito") {
+          alert("Pedido eliminado correctamente");
+          cargarPedidos();
+        } else alert("Error al eliminar pedido");
+      })
+      .catch(() => alert("Error al eliminar pedido"));
+  }
+
+  const editarPedidoForm = document.getElementById("editar-pedido-form");
+  if (editarPedidoForm) {
+    editarPedidoForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const id_pedido = document.getElementById("edit-ped-id").value;
+      const id_usuario = document.getElementById("edit-ped-usuario").value;
+      const fecha_pedido = document.getElementById("edit-ped-fecha").value;
+      const hora_pedido = document.getElementById("edit-ped-hora").value;
+      const importe = document.getElementById("edit-ped-importe").value;
+      const estado = document.getElementById("edit-ped-estado").value;
+
+      fetch(PEDIDOS_API, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_pedido, id_usuario, fecha_pedido, hora_pedido, importe, estado }),
+      })
+        .then(res => res.json())
+        .then(json => {
+          if (json.estado === "Exito") {
+            const modalEl = document.getElementById("editarPedidoModal");
+            const modalInstance = bootstrap.Modal.getInstance(modalEl);
+            if (modalInstance) modalInstance.hide();
+            alert("Pedido actualizado correctamente");
+            cargarPedidos();
+          } else alert("Error al actualizar pedido");
+        })
+        .catch(() => alert("Error al actualizar pedido"));
+    });
+  }
+
   function cargarPedidos() {
     if (!pedidosTbody) return;
     fetch(PEDIDOS_API)
       .then(res => res.json())
       .then(json => {
         if (json && json.estado === "Exito" && Array.isArray(json.data)) {
-          pedidosData = json.data; // guardamos para filtros
+          pedidosData = json.data;
           applyPedidoFilters();
         } else pedidosTbody.innerHTML = `<tr><td colspan="7" class="text-muted">No se encontraron pedidos</td></tr>`;
       })
@@ -233,12 +370,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  // --- EVENT LISTENERS PARA FILTROS ---
   [filterUser, filterDateStart, filterDateEnd, filterEstado, filterOrder].forEach(el => {
     el?.addEventListener("input", applyPedidoFilters);
   });
 
-  // --- LLAMADAS INICIALES ---
   cargarUsuarios();
   cargarProductos();
   cargarPedidos();

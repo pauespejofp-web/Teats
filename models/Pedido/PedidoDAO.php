@@ -119,4 +119,10 @@ class PedidoDAO
 
         return $ok;
     }
+    public static function eliminarPedido(Pedido $pedido) {
+    $db = DataBase::connect();
+    $stmt = $db->prepare("DELETE FROM pedido WHERE id_pedido = ?");
+    return $stmt->execute([$pedido->getIdPedido()]);
+}
+
 }
