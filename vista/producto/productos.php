@@ -29,12 +29,7 @@
         </nav>
 
         <div class="ms-auto">
-            <a href="carrito.php" class="position-relative">
-                <img src="/Modelo-Vista-Controlador/assets/sga/carrito.svg" width="36">
-                <span id="cart-count"
-                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                      style="display:none">0</span>
-            </a>
+        
         </div>
 <a href="index.php?controller=carrito&action=ver" class="position-relative">
     <img src="/Modelo-Vista-Controlador/assets/sga/carrito.svg" width="36" alt="Carrito">

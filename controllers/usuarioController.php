@@ -1,7 +1,7 @@
 <?php
 
-include_once 'models/Usuario/Usuario.php';
-include_once 'models/Usuario/UsuarioDAO.php';
+include_once 'models/usuario/usuario.php';
+include_once 'models/usuario/UsuarioDAO.php';
 
 class UsuarioController
 {
@@ -18,14 +18,14 @@ class UsuarioController
 
     public function registrar()
     {
-        if (!isset($_POST['email'], $_POST['password'], $_POST['nombre'])) {
+        if (!isset($_POST['email'], $_POST['contraseña'], $_POST['nombre'])) {
             echo "Faltan datos";
             return;
         }
         $usuario = new Usuario();
         $usuario->setNombre($_POST['nombre']);
         $usuario->setEmail($_POST['email']);
-        $usuario->setContraseña(password_hash($_POST['password'], PASSWORD_BCRYPT));
+        $usuario->setcontraseña(password_hash($_POST['contraseña'], PASSWORD_BCRYPT));
         $resultado = UsuarioDao::insert($usuario);
         if ($resultado) {
             header("Location: /Modelo-Vista-Controlador/index.php?controller=usuario&action=loginForm&msg=registrado");
@@ -38,13 +38,13 @@ class UsuarioController
 
     public function login()
     {
-        if (!isset($_POST['email'], $_POST['password'])) {
+        if (!isset($_POST['email'], $_POST['contraseña'])) {
             header("Location: index.php?controller=usuario&action=loginForm&error=empty");
             exit;
         }
 
         $email = $_POST['email'];
-        $password = $_POST['password'];
+        $contraseña = $_POST['contraseña'];
 
         $usuario = UsuarioDao::getByEmail($email);
 
@@ -53,27 +53,21 @@ class UsuarioController
             exit;
         }
 
-        if (password_verify($password, $usuario->getContraseña())) {
+        if (password_verify($contraseña, $usuario->getcontraseña())) {
 
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
 
-    $_SESSION['user_id'] = $usuario->getIdUsuario();
-    $_SESSION['user_name'] = $usuario->getNombre();
-
-    include_once 'controllers/LogController.php';
-    LogController::registrar(
-        $usuario->getIdUsuario(),
-        'login',
-        'Usuario inició sesión correctamente'
-    );
-
-    header("Location: index.php");
-    exit;
-}
+            $_SESSION['user_id'] = $usuario->getIdUsuario();
+            $_SESSION['user_name'] = $usuario->getNombre();
+            $_SESSION['user_rol'] = $usuario->getIdRol();
 
 
+
+            header("Location: index.php");
+            exit;
+        }
     }
 
     public function logout()
@@ -85,9 +79,6 @@ class UsuarioController
         session_destroy();
         header("Location: /Modelo-Vista-Controlador/index.php");
     }
-
-
-
 
     public function actualizar()
     {
@@ -101,15 +92,13 @@ class UsuarioController
         $usuario->setNombre($_POST['nombre']);
         $usuario->setEmail($_POST['email']);
 
-        // si hay nueva contraseña → hashearla
         $nuevaPass = null;
-        if (!empty($_POST['password'])) {
-            $nuevaPass = password_hash($_POST['password'], PASSWORD_BCRYPT);
+        if (!empty($_POST['contraseña'])) {
+            $nuevaPass = password_hash($_POST['contraseña'], PASSWORD_BCRYPT);
         }
 
-        // ejecutar actualización
         if ($nuevaPass) {
-            $usuario->setContraseña($nuevaPass);
+            $usuario->setcontraseña($nuevaPass);
             $resultado = UsuarioDao::editarConPass($usuario);
         } else {
             $resultado = UsuarioDao::editarSinPass($usuario);
@@ -172,7 +161,8 @@ class UsuarioController
         if ($resultado) {
             header(
                 "Location: index.php?controller=usuario&action=panel&msg=delete_ok&id="
-                    . urlencode($usuario->getIdUsuario()));
+                    . urlencode($usuario->getIdUsuario())
+            );
             exit;
         } else {
             echo "Error al eliminar usuario.";

@@ -5,8 +5,8 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 include_once __DIR__ . '/../database/database.php';
-include_once __DIR__ . '/../models/Usuario/Usuario.php';
-include_once __DIR__ . '/../models/Usuario/UsuarioDao.php';
+include_once __DIR__ . '/../models/usuario/Usuario.php';
+include_once __DIR__ . '/../models/usuario/UsuarioDao.php';
 
 
 $metodo = $_SERVER['REQUEST_METHOD'];
@@ -58,11 +58,11 @@ switch ($metodo) {
 
     case 'POST':
         $data = json_decode(file_get_contents("php://input"), true);
-        if (isset($data['nombre'], $data['email'], $data['password'])) {
+        if (isset($data['nombre'], $data['email'], $data['contraseña'])) {
             $usuario = new Usuario();
             $usuario->setnombre($data['nombre']);
             $usuario->setEmail($data['email']);
-            $usuario->setContraseña(password_hash($data['password'], PASSWORD_BCRYPT));
+            $usuario->setContraseña(password_hash($data['contraseña'], PASSWORD_BCRYPT));
 
             $resultado = UsuarioDao::insert($usuario);
 
@@ -93,8 +93,8 @@ switch ($metodo) {
             if ($usuario) {
                 $usuario->setNombre($data['nombre']);
                 $usuario->setEmail($data['email']);
-                if (!empty($data['password'])) {
-                    $usuario->setContraseña(password_hash($data['password'], PASSWORD_BCRYPT));
+                if (!empty($data['contraseña'])) {
+                    $usuario->setContraseña(password_hash($data['contraseña'], PASSWORD_BCRYPT));
                 }
                 $resultado = UsuarioDao::editar($usuario);
                 if ($resultado) {

@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . '/Usuario.php';
+include_once __DIR__ . '/usuario.php';
 include_once __DIR__ . '/../../database/database.php';
 
 
@@ -34,20 +34,18 @@ class UsuarioDao
 
     public static function insert($usuario)
     {
-
         $existe = self::getByEmail($usuario->getEmail());
-        if ($existe) {
-            return false;
-        }
+        if ($existe) return false;
 
         $con = DataBase::connect();
 
         $nombre = $usuario->getNombre();
         $email = $usuario->getEmail();
-        $pass = $usuario->getContraseña();
+        $pass = $usuario->getcontraseña();
+        $rol_id = 2;
 
-        $stmt = $con->prepare("INSERT INTO usuario (nombre, email, contraseña) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $nombre, $email, $pass);
+        $stmt = $con->prepare("INSERT INTO usuario (nombre, email, contraseña, id_rol) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("sssi", $nombre, $email, $pass, $rol_id);
         $resultado = $stmt->execute();
 
         $stmt->close();
@@ -104,7 +102,7 @@ class UsuarioDao
             "sssi",
             $usuario->getNombre(),
             $usuario->getEmail(),
-            $usuario->getContraseña(),
+            $usuario->getcontraseña(),
             $usuario->getIdUsuario()
         );
 
@@ -125,7 +123,7 @@ class UsuarioDao
 
         $nombre = $usuario->getNombre();
         $email = $usuario->getEmail();
-        $contraseña = $usuario->getContraseña();
+        $contraseña = $usuario->getcontraseña();
         $id_usuario = $usuario->getIdUsuario();
 
         $stmt->bind_param("sssi", $nombre, $email, $contraseña, $id_usuario);

@@ -10,6 +10,7 @@ class Usuario
     private $telefono;
     private $direccion;
     private $contraseña;
+    private $id_rol;
 
 
     public function getIdUsuario()
@@ -78,14 +79,22 @@ class Usuario
         return $this;
     }
 
-    public function getContraseña()
+    public function getcontraseña()
     {
         return $this->contraseña;
     }
 
-    public function setContraseña($contraseña)
+    public function setcontraseña($contraseña)
     {
         $this->contraseña = $contraseña;
+        return $this;
+    }
+        public function getIdRol() {
+        return $this->id_rol;
+    }
+
+    public function setIdRol($id_rol) {
+        $this->id_rol = $id_rol;
         return $this;
     }
     public function toArray()
@@ -96,9 +105,11 @@ class Usuario
             'apellidos'  => $this->apellidos,
             'email'      => $this->email,
             'telefono'   => $this->telefono,
-            'direccion'  => $this->direccion
+            'direccion'  => $this->direccion,
+            'id_rol'     => $this->id_rol
         ];
     }
 }
+?>
 
 

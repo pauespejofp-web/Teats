@@ -11,7 +11,7 @@
     <input type="email" name="email" value="<?= htmlspecialchars($usuario->getEmail()) ?>" required>
 
     <label>Nueva contraseña (opcional):</label>
-    <input type="password" name="password">
+    <input type="password" name="contraseña">
 
     <button type="submit">Guardar cambios</button>
 </form>

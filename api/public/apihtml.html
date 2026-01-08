@@ -94,30 +94,60 @@
       </div>
     </section>
 
-    <!-- SECCIÓN: PEDIDOS (nueva sección) -->
-    <section id="sec-pedidos" class="content-section" role="region" aria-labelledby="h-pedidos">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 id="h-pedidos">Pedidos</h4>
-        <div class="small-muted">Listado</div>
-      </div>
-      <div class="panel">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="table-light">
-            <tr>
-              <th>ID</th>
-              <th>Usuario ID</th>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Importe</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="pedidos-body">
-          </tbody>
-        </table>
-      </div>
-    </section>
+<section id="sec-pedidos" class="content-section" role="region" aria-labelledby="h-pedidos">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 id="h-pedidos">Pedidos</h4>
+    <div class="small-muted">Listado</div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="row mb-3 g-2 align-items-end">
+    <div class="col-md-2">
+      <label class="form-label small">ID Usuario</label>
+      <input type="number" id="filter-user" class="form-control" placeholder="Usuario">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label small">Fecha desde</label>
+      <input type="date" id="filter-date-start" class="form-control">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label small">Fecha hasta</label>
+      <input type="date" id="filter-date-end" class="form-control">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label small">Estado</label>
+      <input type="text" id="filter-estado" class="form-control" placeholder="pendiente">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label small">Orden importe</label>
+      <select id="filter-order" class="form-select">
+        <option value="">--</option>
+        <option value="asc">Ascendente</option>
+        <option value="desc">Descendente</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="panel">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Usuario ID</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Importe</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="pedidos-body">
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 
     <!-- SECCIÓN: PANEL (enlaza al panel admin) -->
     <section id="sec-panel" class="content-section" role="region" aria-labelledby="h-panel">

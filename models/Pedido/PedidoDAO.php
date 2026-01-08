@@ -1,89 +1,122 @@
 <?php
-include_once __DIR__ . '/Pedido.php';
-include_once __DIR__ . '/../../database/database.php';
 
-class PedidoDao {
+require_once __DIR__ . '/Pedido.php';
+require_once __DIR__ . '/../../database/database.php';
 
-    public static function getById($id) {
+class PedidoDAO
+{
+    public static function getById(int $id)
+    {
         $con = DataBase::connect();
-        $stmt = $con->prepare("SELECT * FROM Pedido WHERE id_pedido = ?");
+
+        $stmt = $con->prepare(
+            "SELECT * FROM pedido WHERE id_pedido = ?"
+        );
         $stmt->bind_param("i", $id);
         $stmt->execute();
+
         $pedido = $stmt->get_result()->fetch_object('Pedido');
+
+        $stmt->close();
         $con->close();
+
         return $pedido;
     }
 
-    public static function getAll() {
+    public static function getAll(): array
+    {
         $con = DataBase::connect();
-        $stmt = $con->prepare("SELECT * FROM Pedido");
+
+        $stmt = $con->prepare(
+            "SELECT * FROM pedido ORDER BY fecha_pedido DESC, hora_pedido DESC"
+        );
         $stmt->execute();
+
         $result = $stmt->get_result();
         $lista = [];
+
         while ($p = $result->fetch_object('Pedido')) {
             $lista[] = $p;
         }
+
+        $stmt->close();
         $con->close();
+
         return $lista;
     }
 
-    public static function insert(Pedido $p) {
-    $con = DataBase::connect();
-    $stmt = $con->prepare(
-        "INSERT INTO Pedido(id_usuario, fecha_pedido, hora_pedido, importe, estado)
-         VALUES (?, ?, ?, ?, ?)"
-    );
-    $idUsuario = $p->getIdUsuario();
-$fecha     = $p->getFechaPedido();
-$hora      = $p->getHoraPedido();
-$importe   = $p->getImporte();
-$estado    = $p->getEstado();
-
-$stmt->bind_param("issds", $idUsuario, $fecha, $hora, $importe, $estado);
-    $stmt->execute();
-
-    if ($stmt->affected_rows > 0) {
-        $p->setIdPedido($con->insert_id);
-        $inserted = true;
-    } else {
-        $inserted = false;
-    }
-
-    $stmt->close();
-    $con->close();
-    return $inserted;
-}
-
-
-    public static function editarPedido(Pedido $p) {
+    public static function insert(Pedido $p): bool
+    {
         $con = DataBase::connect();
+
         $stmt = $con->prepare(
-            "UPDATE Pedido SET id_usuario = ?, fecha_pedido = ?, hora_pedido = ?, importe = ?, estado = ? WHERE id_pedido = ?"
+            "INSERT INTO pedido (id_usuario, fecha_pedido, hora_pedido, importe, estado)
+             VALUES (?, ?, ?, ?, ?)"
         );
-        $idUsuario = $p->getIdUsuario();
-        $fecha = $p->getFechaPedido();
-        $hora = $p->getHoraPedido();
-        $importe = $p->getImporte();
-        $estado = $p->getEstado();
-        $idPedido = $p->getIdPedido();
-        $stmt->bind_param("issdsi", $idUsuario, $fecha, $hora, $importe, $estado, $idPedido);
-        $stmt->execute();
-        $updated = $stmt->affected_rows > 0;
+
+        $stmt->bind_param(
+            "issds",
+            $p->getIdUsuario(),
+            $p->getFechaPedido(),
+            $p->getHoraPedido(),
+            $p->getImporte(),
+            $p->getEstado()
+        );
+
+        $ok = $stmt->execute();
+
+        if ($ok) {
+            $p->setIdPedido($con->insert_id);
+        }
+
         $stmt->close();
         $con->close();
-        return $updated;
+
+        return $ok;
     }
 
-    public static function eliminarPedido($pedido) {
-        $id = is_object($pedido) ? $pedido->getIdPedido() : intval($pedido);
+    public static function update(Pedido $p): bool
+    {
         $con = DataBase::connect();
-        $stmt = $con->prepare("DELETE FROM Pedido WHERE id_pedido = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $deleted = $stmt->affected_rows > 0;
+
+        $stmt = $con->prepare(
+            "UPDATE pedido
+             SET id_usuario = ?, fecha_pedido = ?, hora_pedido = ?, importe = ?, estado = ?
+             WHERE id_pedido = ?"
+        );
+
+        $stmt->bind_param(
+            "issdsi",
+            $p->getIdUsuario(),
+            $p->getFechaPedido(),
+            $p->getHoraPedido(),
+            $p->getImporte(),
+            $p->getEstado(),
+            $p->getIdPedido()
+        );
+
+        $ok = $stmt->execute();
+
         $stmt->close();
         $con->close();
-        return $deleted;
+
+        return $ok;
+    }
+
+    public static function delete(int $id): bool
+    {
+        $con = DataBase::connect();
+
+        $stmt = $con->prepare(
+            "DELETE FROM pedido WHERE id_pedido = ?"
+        );
+        $stmt->bind_param("i", $id);
+
+        $ok = $stmt->execute();
+
+        $stmt->close();
+        $con->close();
+
+        return $ok;
     }
 }
-?>
