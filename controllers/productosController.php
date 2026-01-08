@@ -1,6 +1,6 @@
 <?php
 
-require_once 'models/Producto/ProductoDAO.php';
+require_once 'models/producto/ProductoDAO.php';
 
 class ProductosController
 {
@@ -8,6 +8,7 @@ class ProductosController
     {
         $productos = ProductoDAO::getAll();
         $masVendidos = array_slice($productos, 0, 3);
+        $platosPequenos = array_slice($productos, 0, 2);
 
         $hero1 = 'assets/img/prod1.webp';
         $hero1_title = 'Nuestros Productos';

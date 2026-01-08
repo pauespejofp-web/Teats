@@ -21,8 +21,16 @@ switch ($controller) {
         break;
 
     case 'home':
-        include_once "vista/usuario/home/home.php";
-        exit;
+        include_once 'controllers/homeController.php';
+        $controllerObj = new HomeController();
+
+        if (method_exists($controllerObj, $action)) {
+            $controllerObj->$action();
+            exit;
+        } else {
+            echo "Acción no válida";
+            exit;
+        }
 
     
     case 'productos':
