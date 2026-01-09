@@ -14,7 +14,7 @@ switch ($metodo) {
 
     case 'GET':
         if (isset($_GET['id'])) {
-            $pedido = PedidoDao::getById(intval($_GET['id']));
+            $pedido = PedidoDAO::getById(intval($_GET['id']));
             if ($pedido) {
                 $data = [
                     'id_pedido' => $pedido->getIdPedido(),
@@ -30,7 +30,7 @@ switch ($metodo) {
                 echo json_encode(['estado' => 'Fallido', 'data' => 'Pedido no encontrado']);
             }
         } else {
-            $pedidos = PedidoDao::getAll();
+            $pedidos = PedidoDAO::getAll();
             $lista = [];
             foreach ($pedidos as $p) {
                 $lista[] = [
@@ -56,7 +56,7 @@ switch ($metodo) {
             $pedido->setImporte(floatval($data['importe']));
             $pedido->setEstado($data['estado']);
 
-            $resultado = PedidoDao::insert($pedido);
+            $resultado = PedidoDAO::insert($pedido);
 
             if ($resultado) {
                 echo json_encode(['estado' => 'Exito']);
@@ -72,7 +72,7 @@ switch ($metodo) {
     case 'PUT':
         $data = json_decode(file_get_contents("php://input"), true);
         if (isset($data['id_pedido'], $data['id_usuario'], $data['fecha_pedido'], $data['hora_pedido'], $data['importe'], $data['estado'])) {
-            $pedido = PedidoDao::getById(intval($data['id_pedido']));
+            $pedido = PedidoDAO::getById(intval($data['id_pedido']));
             if ($pedido) {
                 $pedido->setIdUsuario(intval($data['id_usuario']));
                 $pedido->setFechaPedido($data['fecha_pedido']);
@@ -80,7 +80,7 @@ switch ($metodo) {
                 $pedido->setImporte(floatval($data['importe']));
                 $pedido->setEstado($data['estado']);
 
-                $resultado = PedidoDao::editarPedido($pedido);
+                $resultado = PedidoDAO::editarPedido($pedido);
                 if ($resultado) {
                     echo json_encode(['estado' => 'Exito']);
                 } else {
@@ -99,9 +99,9 @@ switch ($metodo) {
     case 'DELETE':
         $data = json_decode(file_get_contents("php://input"), true);
         if (isset($data['id_pedido'])) {
-            $pedido = PedidoDao::getById(intval($data['id_pedido']));
+            $pedido = PedidoDAO::getById(intval($data['id_pedido']));
             if ($pedido) {
-                $resultado = PedidoDao::eliminarPedido($pedido);
+                $resultado = PedidoDAO::eliminarPedido($pedido);
                 if ($resultado) {
                     echo json_encode(['estado' => 'Exito']);
                 } else {

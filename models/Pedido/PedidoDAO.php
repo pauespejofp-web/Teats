@@ -3,7 +3,7 @@
 require_once __DIR__ . '/Pedido.php';
 require_once __DIR__ . '/../../database/database.php';
 
-class PedidoDAO
+class PedidoDao
 {
     public static function getById(int $id)
     {
@@ -75,54 +75,41 @@ class PedidoDAO
         return $ok;
     }
 
-    public static function update(Pedido $p): bool
+    public static function editarPedido(Pedido $p)
     {
         $con = DataBase::connect();
-
         $stmt = $con->prepare(
-            "UPDATE pedido
-             SET id_usuario = ?, fecha_pedido = ?, hora_pedido = ?, importe = ?, estado = ?
-             WHERE id_pedido = ?"
+            "UPDATE pedido SET id_usuario = ?, fecha_pedido = ?, hora_pedido = ?, importe = ?, estado = ? WHERE id_pedido = ?"
         );
-
-        $stmt->bind_param(
-            "issdsi",
-            $p->getIdUsuario(),
-            $p->getFechaPedido(),
-            $p->getHoraPedido(),
-            $p->getImporte(),
-            $p->getEstado(),
-            $p->getIdPedido()
-        );
-
-        $ok = $stmt->execute();
-
+        $idUsuario = $p->getIdUsuario();
+        $fecha = $p->getFechaPedido();
+        $hora = $p->getHoraPedido();
+        $importe = $p->getImporte();
+        $estado = $p->getEstado();
+        $idPedido = $p->getIdPedido();
+        $stmt->bind_param("issdsi", $idUsuario, $fecha, $hora, $importe, $estado, $idPedido);
+        $stmt->execute();
+        $updated = $stmt->affected_rows > 0;
         $stmt->close();
         $con->close();
-
-        return $ok;
+        return $updated;
     }
 
-    public static function delete(int $id): bool
-    {
-        $con = DataBase::connect();
+    public static function eliminarPedido(Pedido $pedido): bool
+{
+    $con = DataBase::connect();
 
-        $stmt = $con->prepare(
-            "DELETE FROM pedido WHERE id_pedido = ?"
-        );
-        $stmt->bind_param("i", $id);
+    $stmt = $con->prepare("DELETE FROM pedido WHERE id_pedido = ?");
+    $id = $pedido->getIdPedido();
+    $stmt->bind_param("i", $id);
 
-        $ok = $stmt->execute();
+    $ok = $stmt->execute();
 
-        $stmt->close();
-        $con->close();
+    $stmt->close();
+    $con->close();
 
-        return $ok;
-    }
-    public static function eliminarPedido(Pedido $pedido) {
-    $db = DataBase::connect();
-    $stmt = $db->prepare("DELETE FROM pedido WHERE id_pedido = ?");
-    return $stmt->execute([$pedido->getIdPedido()]);
+    return $ok;
 }
+
 
 }
