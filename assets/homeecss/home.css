@@ -8,7 +8,6 @@ body {
 
 .hero-slider-section {
     position: relative;
-    height: 100vh;
     overflow: hidden;
 }
 
@@ -37,16 +36,18 @@ body {
 .carousel-text { font-size: 1.2rem; font-weight: 400; margin-bottom: 25px; }
 
 .hero-slider-section .btn {
-    padding: 12px 30px;
+    padding: 12px 70px;
     border-radius: 5px;
     font-size: 1.1rem;
     font-weight: 600;
     transition: 0.3s;
 }
+
+
 .btn-primary { background-color: #3e6ae1; border-color: #3e6ae1; }
-.btn-primary:hover { background-color: #3e6ae1; border-color: #3e6ae1; }
-.btn-secondary { background-color: transparent; border: 2px solid white; color: white; }
-.btn-secondary:hover { background-color: rgba(255,255,255,0.1); }
+.btn-primary:hover { background-color: #3457b1; border-color: #3457b1; }
+.btn-secondary { background-color: white; border: 1px solid white; color: rgb(0, 0, 0); }
+.btn-secondary:hover { background-color: #efefef; border: 1px solid white; color: #000; }
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
@@ -54,8 +55,24 @@ body {
     border-radius: 50%;
     padding: 20px;
 }
+.featured-dishes .btn {
+    border-radius: 5px;
+}
 
-/* --- FEATURED DISHES --- */
+.small-dishes .btn-secondary {
+    background-color: #fff;
+    color: #333;
+}
+
+.small-dishes .btn-secondary:hover {
+    background-color: #efefef;
+    color: #000000;
+}
+.small-dishes .btn-secondary {
+    padding: 5px 70px;
+}
+
+
 .featured-dishes { margin-top: -100px; position: relative; z-index: 2; }
 .card-feature {
     border-radius: 10px;
@@ -72,6 +89,8 @@ body {
 }
 .card-feature:hover img { transform: scale(1.05); }
 
+
+
 .card-overlay {
     position: absolute;
     inset: 0 0 0 0;
@@ -84,19 +103,24 @@ body {
 }
 .card-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 10px; }
 
-/* --- SMALL DISHES (SIN TOCAR) --- */
+
 .small-dishes {
     background-color: #f0f0f0;
     padding: 40px 0;
     border-radius: 10px;
     margin-bottom: 5rem;
 }
+.small-dishes .btn {
+    border-radius: 5px;
+
+}
+
 
 .small-dishes .card-mini {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-    background-color: #fff;
+    background-color: #efefef;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -141,7 +165,6 @@ body {
     border-color: #000;
 }
 
-/* --- MAPA --- */
 .map-section {
     background-color: #f5f5f5;
     border-radius: 15px;
@@ -158,6 +181,36 @@ body {
 .map-info h2 { font-size: 2.3rem; font-weight: 700; }
 .map-info p { font-size: 1.1rem; color: #555; }
 
+
+.btn-find-restaurant {
+    background-color: #171a20;
+    border-color: #171a20;
+    color: #fff;
+    transition: none;
+}
+
+.btn-find-restaurant:hover {
+    background-color: #171a20;
+    border-color: #171a20;
+    color: #fff;
+}
+
+.btn-learn-more {
+    background-color: #efefef;
+    border-color: #efefef;
+    color: #000000;
+    transition: none;
+}
+
+.btn-learn-more :hover {
+    background-color: #efefef;
+    border-color: #efefef;
+    color: #000000;
+    transition: none;
+}
+
+
+
 .site-footer a {
     color: #000 !important;
     text-decoration: none;
@@ -172,7 +225,6 @@ body {
     list-style: none;
 }
 
-/* --- RESPONSIVE --- */
 @media (max-width: 992px) {
     .carousel-caption { transform: translateY(-10%); }
     .carousel-title { font-size: 3.5rem; }

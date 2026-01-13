@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 
         <a class="navbar-brand d-flex align-items-center" href="index.php">
-            <img src="assets/logo.png" alt="Tesla Logo" width="150" class="me-2">
+            <img src="assets/logo.svg" alt="Tesla Logo" width="150" class="me-2">
         </a>
 
 
@@ -26,15 +26,15 @@ if (session_status() === PHP_SESSION_NONE) {
                 </li>
 
                 <li class="nav-item mx-3">
-                    <a class="nav-link" href="carta.php">Carta</a>
+                    <a class="nav-link active" href="carta.php">Carta</a>
                 </li>
 
                 <li class="nav-item mx-3">
-                    <a class="nav-link" href="index.php?controller=productos&action=inicio">Productos</a>
+                    <a class="nav-link active" href="index.php?controller=productos&action=inicio">Productos</a>
                 </li>
 
                 <li class="nav-item mx-3">
-                    <a class="nav-link" href="contacto.php">Contacto</a>
+                    <a class="nav-link active" href="contacto.php">Contacto</a>
                 </li>
 
             </ul>

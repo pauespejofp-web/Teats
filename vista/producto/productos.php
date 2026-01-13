@@ -13,8 +13,19 @@
         .topbar { height: 72px; border-bottom: 1px solid rgba(0,0,0,.06); }
         .hero { height: 870px; background-size: cover; background-position: center; display:flex; align-items:center; justify-content:center; }
         .hero-title { font-size:2.2rem; font-weight:800; color:#fff; text-shadow:0 6px 14px rgba(0,0,0,.6); }
-        .best-image { width:100%; height:260px; object-fit:cover; }
-        .card-product img { height:180px; object-fit:cover; }
+        .best-image {height:700px; object-fit:cover; }
+        .card-product img { height:700px; object-fit:cover; }
+        .btn-primary{ background: #3e6ae1;}
+        .btn-primary:hover{ background: #3457b1;}
+        .btn-masvendidos{
+            background-color: #171a20;
+            border-color: #171a20;
+        }
+        .btn-masvendidos:hover {
+            background-color: #171a20;
+            border-color: #171a20;
+        }
+        
     </style>
 </head>
 <body>
@@ -43,7 +54,7 @@
     <h1 class="hero-title">Productos Teats</h1>
 </section>
 
-<main class="container py-5">
+<main class="container-fluid px-4">
 
     <h3 class="fw-bold mb-4">Productos más vendidos</h3>
     <div class="row g-4">
@@ -56,7 +67,7 @@
                         <p class="fw-semibold text-muted"><?= number_format($p->getPrecio(), 2) ?> €</p>
                         <p class="small text-muted"><?= htmlspecialchars($p->getDescripcion()) ?></p>
 
-                        <button class="btn btn-dark mt-auto add-to-cart"
+                        <button class="btn btn-masvendidos btn-dark mt-auto add-to-cart"
                                 data-id="<?= $p->getIdProducto() ?>"
                                 data-name="<?= htmlspecialchars($p->getNombre(), ENT_QUOTES) ?>"
                                 data-price="<?= $p->getPrecio() ?>"
@@ -72,7 +83,7 @@
     <h3 class="fw-bold mt-5 mb-4">Todos los productos</h3>
     <div class="row g-4">
         <?php foreach ($productos as $p): ?>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="col-12 col-md-4">
                 <div class="card card-product h-100">
                     <img src="/Modelo-Vista-Controlador/<?= $p->getImagenUrl() ?>" alt="<?= htmlspecialchars($p->getNombre()) ?>">
                     <div class="card-body d-flex flex-column">

@@ -88,7 +88,15 @@
         }
 
         .checkout-btn {
-            background: #4d8bff;
+            background: #3e6ae1;
+            border: none;
+            color: #fff;
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 6px;
+        }
+        .checkout-btn:hover {
+            background: #3457b1;
             border: none;
             color: #fff;
             width: 100%;

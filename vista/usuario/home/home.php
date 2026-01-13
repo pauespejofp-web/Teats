@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/home.css">
+    <link rel="stylesheet" href="assets/homeecss/home.css">
 </head>
 
 <body>
@@ -54,8 +54,8 @@
                 <div class="card-overlay p-4">
                     <h4 class="card-title text-white"><?= $p->getNombre() ?></h4>
                     <div class="d-flex gap-2">
-                        <a href="index.php?controller=productos&action=inicio" class="btn btn-primary btn-sm">Pedir ahora</a>
-                        <a href="index.php?controller=productos&action=inicio" class="btn btn-outline-light btn-sm">Añadir al carrito</a>
+                        <a href="index.php?controller=productos&action=inicio" class="btn btn-primary btn-lg">Pedir ahora</a>
+                        <a href="index.php?controller=productos&action=inicio" class="btn btn-secondary btn-lg">Añadir al carrito</a>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                 <div class="card-body p-3">
                     <h6 class="card-title"><?= $p->getNombre() ?></h6>
                     <p class="card-text text-muted small"><?= $p->getDescripcion() ?></p>
-                    <a href="index.php?controller=productos&action=inicio" class="btn btn-dark btn-sm mt-2">Pedir ahora</a>
+                    <a href="index.php?controller=productos&action=inicio" class="btn btn-secondary ">Pedir ahora</a>
                 </div>
                 <img src="<?= $p->getImagenUrl() ?>" class="card-img-end" alt="<?= $p->getNombre() ?>">
             </div>
@@ -94,18 +94,8 @@
                 <h2 class="mb-3">Find Your Restaurant</h2>
                 <p class="mb-4">View the network of Tesla Superchargers and Destination Chargers available near you.</p>
                 <div class="d-flex gap-3 mb-4">
-                    <button class="btn btn-dark btn-find-restaurant">Find Restaurant</button>
-                    <button class="btn btn-outline-dark btn-learn-more">Learn More</button>
-                </div>
-                <div class="stats d-flex align-items-center">
-                    <div class="me-4 d-flex align-items-center">
-                        <span class="icon-heart me-2">❤️</span>
-                        <strong>130</strong>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <span class="icon-star me-2">⭐</span>
-                        <strong>40</strong>
-                    </div>
+                    <button class="btn btn-find-restaurant">Find Restaurant</button>
+                    <button class="btn btn-learn-more">Learn More</button>
                 </div>
             </div>
         </div>
