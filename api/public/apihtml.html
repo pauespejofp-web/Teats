@@ -100,7 +100,7 @@
     <div class="small-muted">Listado</div>
   </div>
 
-  <!-- FILTROS -->
+<!--Filtros Pedidos-->
   <div class="row mb-3 g-2 align-items-end">
     <div class="col-md-2">
       <label class="form-label small">ID Usuario</label>
@@ -149,33 +149,7 @@
 
 
 
-    <!-- SECCIÓN: PANEL (enlaza al panel admin) -->
-    <section id="sec-panel" class="content-section" role="region" aria-labelledby="h-panel">
-      <div class="section-header mb-3">
-        <h4 id="h-panel">Panel</h4>
-        <div class="small-muted">Acceso al panel administrativo completo</div>
-      </div>
-      <div class="panel">
-        <p>Accede al panel administrativo completo:</p>
-        <a class="btn btn-outline-primary" href="/Modelo-Vista-Controlador/vista/admin/Panel_administracion/panel_administracion.php">Abrir panel admin</a>
-      </div>
-    </section>
 
-    <!-- SECCIÓN: OFERTAS (placeholder) -->
-    <section id="sec-ofertas" class="content-section" role="region" aria-labelledby="h-ofertas">
-      <div class="section-header mb-3">
-        <h4 id="h-ofertas">Ofertas</h4>
-        <div class="small-muted">Promociones</div>
-      </div>
-      <div class="panel">
-        <p>Sección de ofertas (placeholder).</p>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<!-- Modales (mantén modalAddUser y editar modal como antes) -->
 <!-- Modal Crear usuario -->
 <div class="modal fade" id="modalAddUser" tabindex="-1">
   <div class="modal-dialog">
@@ -209,51 +183,6 @@
   </div>
 </div>
 
-<!-- Modal Crear/Editar Oferta -->
-<div class="modal fade" id="modalOferta" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Oferta</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form id="form-oferta">
-          <input type="hidden" id="edit-oferta-id">
-          <div class="mb-3">
-            <label>Código de descuento</label>
-            <input type="text" id="edit-oferta-nombre" class="form-control" placeholder="20OFF" required>
-          </div>
-          <div class="mb-3">
-            <label>Descripción</label>
-            <textarea id="edit-oferta-descripcion" class="form-control" rows="2"></textarea>
-          </div>
-          <div class="mb-3">
-            <label>Descuento (%)</label>
-            <input type="number" step="0.01" id="edit-oferta-descuento" class="form-control" value="20" required>
-          </div>
-          <div class="mb-3">
-            <label>Fecha inicio</label>
-            <input type="date" id="edit-oferta-inicio" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label>Fecha fin</label>
-            <input type="date" id="edit-oferta-fin" class="form-control" required>
-          </div>
-          <div class="form-check mb-3">
-            <input type="checkbox" id="edit-oferta-activo" class="form-check-input" checked>
-            <label class="form-check-label">Activo</label>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" form="form-oferta" class="btn btn-primary">Guardar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <!-- Modal Editar usuario -->
 <div class="modal fade" id="editarModal" tabindex="-1" aria-hidden="true">
@@ -278,14 +207,14 @@
             <label>Contraseña <small>(dejar vacío si no cambiar)</small></label>
             <input type="password" id="edit-password" class="form-control">
           </div>
-          <button type="submit" class="btn btn-primary d-none">Guardar</button> <!-- trigger via form submit button in modal footer if needed -->
+          <button type="submit" class="btn btn-primary d-none">Guardar</button> 
         </form>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal Editar producto (nuevo) -->
+<!-- Modal Editar producto -->
 <div class="modal fade" id="editarProductoModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -370,13 +299,13 @@
   </div>
 </div>
 
-<!-- Scripts -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- admin.js para controlar el menú lateral y data-target -->
+
 <script src="/Modelo-Vista-Controlador/vista/admin/Panel_administracion/admin.js"></script>
 
-<!-- script API cliente (carga/editar/eliminar) -->
+
 <script src="api.js"></script>
 
 </body>

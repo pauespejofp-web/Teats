@@ -17,56 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const filterEstado = document.getElementById("filter-estado");
   const filterOrder = document.getElementById("filter-order");
 
-  let pedidosData = [];
-
-  function applyPedidoFilters() {
-    if (!pedidosData) return;
-    let filtered = [...pedidosData];
-
-    const userId = parseInt(filterUser?.value);
-    const dateStart = filterDateStart?.value;
-    const dateEnd = filterDateEnd?.value;
-    const estado = filterEstado?.value.trim().toLowerCase();
-    const order = filterOrder?.value;
-
-    if (!isNaN(userId)) filtered = filtered.filter(p => p.id_usuario === userId);
-    if (dateStart) filtered = filtered.filter(p => p.fecha_pedido >= dateStart);
-    if (dateEnd) filtered = filtered.filter(p => p.fecha_pedido <= dateEnd);
-    if (estado) filtered = filtered.filter(p => p.estado.toLowerCase() === estado);
-
-    if (order === "asc") filtered.sort((a, b) => parseFloat(a.importe) - parseFloat(b.importe));
-    if (order === "desc") filtered.sort((a, b) => parseFloat(b.importe) - parseFloat(a.importe));
-
-    pedidosTbody.innerHTML = "";
-    if (filtered.length === 0) {
-      pedidosTbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No hay pedidos</td></tr>`;
-      return;
-    }
-
-    filtered.forEach(p => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${p.id_pedido}</td>
-        <td>${p.id_usuario}</td>
-        <td>${p.fecha_pedido}</td>
-        <td>${p.hora_pedido}</td>
-        <td>${parseFloat(p.importe).toFixed(2)} €</td>
-        <td>${p.estado}</td>
-        <td>
-          <button class="btn btn-sm btn-outline-primary btn-editar-ped" data-id="${p.id_pedido}">Editar</button>
-          <button class="btn btn-sm btn-outline-danger btn-eliminar-ped" data-id="${p.id_pedido}">Eliminar</button>
-        </td>
-      `;
-      pedidosTbody.appendChild(tr);
-    });
-
-    pedidosTbody.querySelectorAll(".btn-editar-ped").forEach(btn => {
-      btn.addEventListener("click", () => editarPedido(btn.dataset.id));
-    });
-    pedidosTbody.querySelectorAll(".btn-eliminar-ped").forEach(btn => {
-      btn.addEventListener("click", () => eliminarPedido(btn.dataset.id));
-    });
-  }
 
   function cargarUsuarios() {
     fetch(API_URL)
@@ -256,7 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(() => alert("Error al eliminar producto"));
   }
 
-  // manejar submit del formulario de editar producto
   const editarProductoForm = document.getElementById("editar-producto-form");
   if (editarProductoForm) {
     editarProductoForm.addEventListener("submit", e => {
@@ -286,14 +235,68 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(() => alert("Error al actualizar producto"));
     });
   }
+    let pedidosData = [];
 
-  // --- EDITAR / ELIMINAR PEDIDOS ---
+  function applyPedidoFilters() {
+
+    
+    if (!pedidosData) return;
+    let filtered = [...pedidosData];
+
+    //?.value es usado para evitar errores si lo del filtro no existe
+    const userId = parseInt(filterUser?.value);
+    const dateStart = filterDateStart?.value;
+    const dateEnd = filterDateEnd?.value;
+    const estado = filterEstado?.value.trim().toLowerCase();
+    const order = filterOrder?.value;
+
+    if (!isNaN(userId)) filtered = filtered.filter(p => p.id_usuario === userId);
+    if (dateStart) filtered = filtered.filter(p => p.fecha_pedido >= dateStart);
+    if (dateEnd) filtered = filtered.filter(p => p.fecha_pedido <= dateEnd);
+    if (estado) filtered = filtered.filter(p => p.estado.toLowerCase() === estado);
+
+    if (order === "asc") filtered.sort((a, b) => parseFloat(a.importe) - parseFloat(b.importe));
+    if (order === "desc") filtered.sort((a, b) => parseFloat(b.importe) - parseFloat(a.importe));
+
+    pedidosTbody.innerHTML = "";
+    if (filtered.length === 0) {
+      pedidosTbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No hay pedidos</td></tr>`;
+      return;
+    }
+
+    filtered.forEach(p => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${p.id_pedido}</td>
+        <td>${p.id_usuario}</td>
+        <td>${p.fecha_pedido}</td>
+        <td>${p.hora_pedido}</td>
+        <td>${parseFloat(p.importe).toFixed(2)} €</td>
+        <td>${p.estado}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary btn-editar-ped" data-id="${p.id_pedido}">Editar</button>
+          <button class="btn btn-sm btn-outline-danger btn-eliminar-ped" data-id="${p.id_pedido}">Eliminar</button>
+        </td>
+      `;
+      pedidosTbody.appendChild(tr);
+    });
+
+    pedidosTbody.querySelectorAll(".btn-editar-ped").forEach(btn => {
+      btn.addEventListener("click", () => editarPedido(btn.dataset.id));
+    });
+    pedidosTbody.querySelectorAll(".btn-eliminar-ped").forEach(btn => {
+      btn.addEventListener("click", () => eliminarPedido(btn.dataset.id));
+    });
+  }
+
+
   function editarPedido(id) {
     fetch(PEDIDOS_API + "?id=" + id)
       .then(res => res.json())
       .then(json => {
         if (json && json.estado === "Exito") {
           const p = json.data;
+          //Rellena los campos del formulario de edición con los datos del pedido:
           document.getElementById("edit-ped-id").value = p.id_pedido;
           document.getElementById("edit-ped-usuario").value = p.id_usuario || "";
           document.getElementById("edit-ped-fecha").value = p.fecha_pedido || "";
